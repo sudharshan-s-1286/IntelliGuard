@@ -6,18 +6,18 @@ for the Risk Assessment, Decision, and Remediation engines.
 
 # Attack Weights (0-100 scale)
 ATTACK_WEIGHTS = {
-    "Prompt Injection": 30,
-    "System Prompt Extraction": 35,
-    "Jailbreak": 25,
-    "Data Exfiltration": 40,
-    "Tool Abuse": 35,
-    "Role Escalation": 30,
-    "Instruction Override": 25,
-    "Prompt Leakage": 30,
-    "Obfuscated Prompt": 20,
-    "Encoding-based Attacks": 30,
-    "Multi-step Attack Chains": 40,
-    "Suspicious Command Patterns": 35
+    "Data Exfiltration": 100,
+    "Tool Abuse": 90,
+    "Prompt Injection": 85,
+    "System Prompt Extraction": 80,
+    "Jailbreak": 75,
+    "Role Escalation": 70,
+    "Prompt Leakage": 65,
+    "Suspicious Command Patterns": 65,
+    "Instruction Override": 60,
+    "Multi-step Attack Chains": 50,
+    "Encoding-based Attacks": 50,
+    "Obfuscated Prompt": 40
 }
 
 # Penalty modifiers
