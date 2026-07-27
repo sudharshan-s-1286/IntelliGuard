@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import AnalyzeWidget from '../components/AnalyzeWidget';
 import { 
   LineChart, Line, AreaChart, Area, PieChart, Pie, Cell, 
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, 
@@ -330,6 +331,8 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
+        <AnalyzeWidget />
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
