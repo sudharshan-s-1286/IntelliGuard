@@ -1,0 +1,81 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.4, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/pranav/Desktop/IntelliGaurd/backend
+plugins: anyio-4.14.2, cov-7.1.0
+collected 32 items
+
+tests/api/test_api.py ....                                               [ 12%]
+tests/integration/test_pipeline.py ..                                    [ 18%]
+tests/security/test_edge_cases.py ....                                   [ 31%]
+tests/security/test_errors.py ..                                         [ 37%]
+tests/security/test_threats.py .....                                     [ 53%]
+tests/unit/test_audit.py ...                                             [ 62%]
+tests/unit/test_decision.py ..                                           [ 68%]
+tests/unit/test_detector.py ...                                          [ 78%]
+tests/unit/test_parser.py ...                                            [ 87%]
+tests/unit/test_remediation.py ..                                        [ 93%]
+tests/unit/test_scorer.py ..                                             [100%]
+
+=============================== warnings summary ===============================
+venv/lib/python3.14/site-packages/fastapi/testclient.py:1
+  /home/pranav/Desktop/IntelliGaurd/backend/venv/lib/python3.14/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/api/test_api.py::test_analyze_endpoint_safe
+tests/integration/test_pipeline.py::test_full_pipeline_safe
+tests/integration/test_pipeline.py::test_full_pipeline_block
+tests/security/test_errors.py::test_audit_logger_failure
+tests/security/test_errors.py::test_detector_failure
+  /home/pranav/Desktop/IntelliGaurd/backend/agents/security_agent/agent.py:141: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self._metrics["last_request_time"] = datetime.utcnow().isoformat() + "Z"
+
+tests/api/test_api.py: 1 warning
+tests/integration/test_pipeline.py: 2 warnings
+tests/security/test_edge_cases.py: 4 warnings
+tests/security/test_errors.py: 1 warning
+tests/security/test_threats.py: 5 warnings
+tests/unit/test_audit.py: 2 warnings
+  /home/pranav/Desktop/IntelliGaurd/backend/agents/security_agent/audit/models.py:13: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat() + "Z")
+
+tests/api/test_api.py::test_analyze_endpoint_safe
+tests/integration/test_pipeline.py::test_full_pipeline_safe
+tests/integration/test_pipeline.py::test_full_pipeline_block
+tests/security/test_errors.py::test_audit_logger_failure
+tests/security/test_errors.py::test_detector_failure
+  /home/pranav/Desktop/IntelliGaurd/backend/shared/response_models.py:15: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat() + "Z")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.14.4-final-0 ________________
+
+Name                                       Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------
+agents/security_agent/__init__.py              0      0   100%
+agents/security_agent/agent.py                93     15    84%   69, 107-115, 121-127
+agents/security_agent/audit/__init__.py        4      0   100%
+agents/security_agent/audit/analytics.py      43     21    51%   24, 27, 33, 36-39, 42-45, 48-52, 55-56, 59, 68-69
+agents/security_agent/audit/logger.py         21      0   100%
+agents/security_agent/audit/models.py          8      0   100%
+agents/security_agent/audit/storage.py        24      4    83%   23-24, 32-33
+agents/security_agent/audit/utils.py           6      1    83%   10
+agents/security_agent/config.py                6      0   100%
+agents/security_agent/decision.py             25      6    76%   35-37, 39-41
+agents/security_agent/detector.py             77      0   100%
+agents/security_agent/models.py                0      0   100%
+agents/security_agent/patterns.py              3      0   100%
+agents/security_agent/prompt_parser.py         7      0   100%
+agents/security_agent/remediation.py          78     26    67%   15-24, 43, 55, 83, 89-92, 116, 123-124, 127-133, 144
+agents/security_agent/schemas.py              15      0   100%
+agents/security_agent/scorer.py               53      4    92%   39, 41, 50, 52
+agents/security_agent/tests/__init__.py        0      0   100%
+agents/security_agent/utils.py                55     20    64%   35-36, 40-47, 51-54, 68-73
+------------------------------------------------------------------------
+TOTAL                                        518     97    81%
+======================= 32 passed, 26 warnings in 1.15s ========================
+Running Performance Benchmark...
+Total time for 100 requests: 0.14s (Avg 1.43ms/req)
+Total time for 500 requests: 0.59s (Avg 1.17ms/req)
+Total time for 1000 requests: 1.15s (Avg 1.15ms/req)
+Performance test PASSED. Avg latency < 200ms.
