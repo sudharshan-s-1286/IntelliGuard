@@ -1,0 +1,14 @@
+rules:
+  - id: "001"
+    role: "guest"
+    contains: "confidential"
+    severity: "HIGH"
+
+  - id: "002"
+    contains: "diagnosis"
+    severity: "CRITICAL"
+
+  - id: "003"
+    role: "user"
+    contains: "password"
+    severity: "MEDIUM"

@@ -1,0 +1,70 @@
+rules:
+  # GDPR Violations
+  - regulation: "GDPR"
+    severity: "High"
+    description: "Personal email disclosed."
+    patterns:
+      - '(?i:\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b)'
+  - regulation: "GDPR"
+    severity: "High"
+    description: "Missing user consent."
+    patterns:
+      - '(?i:\b(?:without consent|no consent|without user permission)\b)'
+  - regulation: "GDPR"
+    severity: "Medium"
+    description: "Excessive disclosure of personal details."
+    patterns:
+      - '(?i:\b(?:excessive exposure|expose all profiles|dump user db)\b)'
+
+  # HIPAA Violations
+  - regulation: "HIPAA"
+    severity: "High"
+    description: "Exposed medical record details."
+    patterns:
+      - '(?i:\b(?:medical record|health history|clinical notes)\b)'
+  - regulation: "HIPAA"
+    severity: "High"
+    description: "Exposed medical diagnosis details."
+    patterns:
+      - '(?i:\b(?:diagnosed with\b|diagnosis:|illness details\b))'
+  - regulation: "HIPAA"
+    severity: "High"
+    description: "Exposed treatment or therapy records."
+    patterns:
+      - '(?i:\b(?:prescription:|treatment plan\b|therapy logs\b))'
+  - regulation: "HIPAA"
+    severity: "High"
+    description: "Exposed patient identifier."
+    patterns:
+      - '(?i:\b(?:patient id|patient identification|patient name)\b)'
+
+  # PCI-DSS Violations
+  - regulation: "PCI-DSS"
+    severity: "Critical"
+    description: "Exposed payment card numbers."
+    patterns:
+      - '(?i:\b(?:4\d{3}|5[1-5]\d{2}|6011|3[47]\d{2})[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b|\b3[47]\d{2}[- ]?\d{6}[- ]?\d{5}\b)'
+  - regulation: "PCI-DSS"
+    severity: "Critical"
+    description: "Exposed card authentication data."
+    patterns:
+      - '(?i:\b(?:cvv\b|cvc\b|cv2\b|pin number)\b)'
+
+  # SOC2 Violations
+  - regulation: "SOC2"
+    severity: "High"
+    description: "Exposed system credentials."
+    patterns:
+      - '(?i:\b(?:password|passwd|secret_key|api_key)\b\s*[:=]\s*["'']?[a-zA-Z0-9_\-]{6,64}["'']?)'
+  - regulation: "SOC2"
+    severity: "High"
+    description: "Exposed auth tokens or session data."
+    patterns:
+      - '(?i:\b(?:bearer\s+[a-zA-Z0-9_\-\.\~]+|jwt\s+eyJ[a-zA-Z0-9_\-\.]*|auth_token)\b)'
+
+  # ISO27001 Violations
+  - regulation: "ISO27001"
+    severity: "High"
+    description: "Security policy compliance violation."
+    patterns:
+      - '(?i:\b(?:disable firewall|disable encryption|plaintext password|unauthorized bypass)\b)'

@@ -1,0 +1,25 @@
+rules:
+  - category: "Hate Speech"
+    severity: "High"
+    patterns:
+      - '(?i:\b(?:hate_speech_placeholder|incite_hatred|scum)\b)'
+  - category: "Harassment"
+    severity: "Medium"
+    patterns:
+      - '(?i:\b(?:harass_placeholder|stalk|dox|troll)\b)'
+  - category: "Violence"
+    severity: "High"
+    patterns:
+      - '(?i:\b(?:violence_placeholder|kill|murder|stab|beatup)\b)'
+  - category: "Threats"
+    severity: "High"
+    patterns:
+      - '(?i:\b(?:threat_placeholder|bomb|assassinate|harm_you)\b)'
+  - category: "Offensive Language"
+    severity: "Medium"
+    patterns:
+      - '(?i:\b(?:offensive_placeholder|bastard|trash|idiot)\b)'
+  - category: "Discrimination"
+    severity: "High"
+    patterns:
+      - '(?i:\b(?:discriminate_placeholder|racist|sexist|xenophobic)\b)'

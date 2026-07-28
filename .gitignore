@@ -32,3 +32,21 @@ backend/*.sqlite3
 *.njsproj
 *.sln
 *.sw?
+
+# Ignore Python cache
+__pycache__/
+**/__pycache__/
+
+# Ignore virtual environments
+.venv/
+**/.venv/
+venv/
+**/venv/
+
+# Ignore pytest cache
+.pytest_cache/
+**/.pytest_cache/
+
+# Ignore env files
+.env
+*.env
