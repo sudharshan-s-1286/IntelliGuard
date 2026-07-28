@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trust-agent"
+version = "0.1.0"
+description = "Trust Agent backend foundation for IntelliGuard platform"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    { name = "IntelliGuard Team" }
+]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short"
