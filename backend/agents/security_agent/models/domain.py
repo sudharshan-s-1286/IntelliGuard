@@ -89,3 +89,15 @@ class VectorMetadata:
     created_at: str
     updated_at: str
     tags: list[str]
+
+@dataclass
+class NormalizedDatasetRecord:
+    """Standardized schema for dataset ingestion."""
+    id: str
+    category: str
+    subcategory: str
+    severity: str
+    owasp: str
+    text: str
+    source: str
+    tags: list[str]

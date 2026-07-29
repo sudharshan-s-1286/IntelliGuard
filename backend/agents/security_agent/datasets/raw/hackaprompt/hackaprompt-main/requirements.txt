@@ -1,0 +1,7 @@
+openai
+tiktoken
+sentencepiece
+transformers
+torch
+gradio
+pymongo
