@@ -1,1 +1,1 @@
-"""Test package for security agent."""
+"""Tests."""
