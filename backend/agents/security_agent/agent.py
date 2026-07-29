@@ -13,8 +13,9 @@ from backend.agents.security_agent.detectors.risk_scorer import calculate_risk_s
 from backend.agents.security_agent.reporting.generator import ReportGenerator
 from backend.agents.security_agent.utils.telemetry import AuditLogger, MetricsRegistry
 
-from backend.shared.models.communication import SecurityAgentResponse
+from backend.agents.security_agent.models.communication import SecurityAgentResponse
 from backend.agents.security_agent.models.domain import RiskScore
+
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +57,7 @@ class SecurityAgent:
 
     def version(self) -> str:
         return "1.0.0"
+
 
     def _metadata(self) -> dict:
         return {"architecture": "hybrid_async"}

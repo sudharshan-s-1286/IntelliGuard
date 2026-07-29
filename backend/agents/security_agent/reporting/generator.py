@@ -2,7 +2,7 @@
 from typing import Dict, Any
 
 from backend.agents.security_agent.models.domain import DetectionResult
-from backend.shared.models.communication import SecurityAgentResponse
+from backend.agents.security_agent.models.communication import SecurityAgentResponse
 
 class ReportGenerator:
     """Generates standardized security reports from DetectionResults."""
