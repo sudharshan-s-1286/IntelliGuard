@@ -14,6 +14,8 @@ class Finding:
     threat: Threat
     severity: float
     evidence: str
+    detector: str = "Unknown"
+    confidence: float = 0.0
 
 @dataclass
 class RiskScore:
@@ -41,12 +43,26 @@ class Metadata:
     model_versions: Dict[str, str]
 
 @dataclass
+class RoutingDecision:
+    """Indicates if an LLM is required and why."""
+    needs_llm: bool
+    reason: str
+
+@dataclass
 class DetectionResult:
     """The internal aggregation of all findings."""
     risk_score: RiskScore
     findings: List[Finding]
     recommendations: List[Recommendation]
     metadata: Metadata
+    routing: RoutingDecision = None
+    explainability: List[str] = None
+
+    def __post_init__(self):
+        if self.routing is None:
+            self.routing = RoutingDecision(needs_llm=False, reason="Default initialization")
+        if self.explainability is None:
+            self.explainability = []
 
 @dataclass
 class VectorMetadata:

@@ -5,7 +5,7 @@ using a centralized pattern-matching engine.
 """
 import re
 
-from backend.agents.security_agent.knowledge.manager import PATTERNS
+from backend.agents.security_agent.knowledge.static_patterns import PATTERNS
 from backend.agents.security_agent.validators.request_validator import calculate_confidence, match_patterns
 
 

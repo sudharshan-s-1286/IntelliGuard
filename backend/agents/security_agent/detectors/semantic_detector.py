@@ -84,7 +84,9 @@ class SemanticDetector:
                         description=f"{description} (Similarity: {score:.2f}, Confidence: {confidence})"
                     ),
                     severity=mapped_severity,
-                    evidence=f"Matched Pattern ID: {match.pattern_id}"
+                    evidence=f"Matched Pattern ID: {match.pattern_id}",
+                    detector="SemanticDetector",
+                    confidence=score
                 )
                 findings.append(finding)
 
