@@ -1,7 +1,8 @@
 import pytest
-from agents.security_agent.scorer import calculate_risk_score
+from backend.agents.security_agent.detectors.risk_scorer import calculate_risk_score
 
-def test_calculate_risk_score_safe():
+@pytest.mark.asyncio
+async def test_calculate_risk_score_safe():
     findings = {
         "Prompt Injection": {"attack": "Prompt Injection", "detected": False, "confidence": 0.0, "severity": "Low", "reason": ""}
     }
@@ -9,7 +10,8 @@ def test_calculate_risk_score_safe():
     assert assessment["risk_score"] == 0
     assert assessment["risk_category"] == "Safe"
 
-def test_calculate_risk_score_critical():
+@pytest.mark.asyncio
+async def test_calculate_risk_score_critical():
     findings = {
         "Data Exfiltration": {"attack": "Data Exfiltration", "detected": True, "confidence": 1.0, "severity": "High", "reason": "Matched 1 signature(s)", "matched_patterns": ["exfiltrate"]},
         "Prompt Injection": {"attack": "Prompt Injection", "detected": True, "confidence": 1.0, "severity": "High", "reason": "Matched", "matched_patterns": ["ignore"]}

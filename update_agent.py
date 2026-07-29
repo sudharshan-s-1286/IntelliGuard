@@ -1,4 +1,6 @@
-"""Agent Entry Point."""
+import os
+
+agent_code = """\"\"\"Agent Entry Point.\"\"\"
 from typing import Any
 import time
 from datetime import datetime, UTC
@@ -20,17 +22,16 @@ class AgentStatus:
 class AgentResponse:
     def __init__(self, **kwargs):
         self.kwargs = kwargs
-        for k,v in kwargs.items(): setattr(self, k, v)
     def model_dump(self):
         return self.kwargs
     def dict(self):
         return self.kwargs
 
 class SecurityAgent:
-    """
+    \"\"\"
     Security Agent implementation.
     Acts as the facade for the Orchestrator, delegating to internal detectors.
-    """
+    \"\"\"
     def __init__(self):
         self._metrics = {
             "total_requests": 0,
@@ -46,10 +47,7 @@ class SecurityAgent:
             def __init__(self):
                 self.storage = type('MockStorage', (), {'save': lambda self, *args: None})()
             def log_event(self, data):
-                try:
-                    self.storage.save(data)
-                except Exception:
-                    pass
+                self.storage.save(data)
         self.audit_logger = MockLogger()
 
     @property
@@ -86,7 +84,7 @@ class SecurityAgent:
                 processing_time_ms=process_time_ms,
                 result=result,
                 metadata=self._metadata()
-            )
+            ).dict()
         except Exception as e:
             logger.exception("[SecurityAgent] Process failed:")
             self._metrics["failed_requests"] += 1
@@ -98,7 +96,7 @@ class SecurityAgent:
                 processing_time_ms=process_time_ms,
                 error_code="SECURITY_ANALYSIS_FAILED",
                 message=str(e)
-            )
+            ).dict()
 
     async def analyze(self, prompt: str) -> dict:
         start_time = time.time()
@@ -177,19 +175,7 @@ class SecurityAgent:
 
     async def health_check(self) -> Any:
         pass
+"""
 
-    def health(self) -> dict[str, Any]:
-        """Return the health status of the agent."""
-        uptime_s = time.time() - self._start_time
-        return {
-            "status": "healthy",
-            "uptime": f"{uptime_s:.2f}s",
-            "version": self.version(),
-            "checks": {
-                "detector": True,
-                "scorer": True,
-                "audit": True,
-                "remediation": True
-            }
-        }
-
+with open("/home/pranav/Desktop/IntelliGaurd/backend/agents/security_agent/agent.py", "w") as f:
+    f.write(agent_code)

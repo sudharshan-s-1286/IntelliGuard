@@ -1,3 +1,4 @@
+import pytest
 """Unit tests for the Security Agent."""
 import unittest
 from backend.agents.security_agent.agent import SecurityAgent
@@ -8,7 +9,8 @@ class TestSecurityAgent(unittest.TestCase):
     def setUp(self) -> None:
         self.agent = SecurityAgent()
 
-    def test_initialization(self) -> None:
+    @pytest.mark.asyncio
+    async def test_initialization(self) -> None:
         """Test agent initializes correctly."""
         # TODO: Assert initialization success
         pass

@@ -1,18 +1,21 @@
 import pytest
-from agents.security_agent.prompt_parser import parse_prompt
+from backend.agents.security_agent.validators.request_validator import parse_prompt
 
-def test_parse_prompt_normal():
+@pytest.mark.asyncio
+async def test_parse_prompt_normal():
     prompt = "  Hello   world!  "
     result = parse_prompt(prompt)
     assert result["original"] == "  Hello   world!  "
     assert result["normalized"] == "Hello world!"
     assert result["was_encoded"] is False
 
-def test_parse_prompt_empty():
+@pytest.mark.asyncio
+async def test_parse_prompt_empty():
     result = parse_prompt("")
     assert result["normalized"] == ""
 
-def test_parse_prompt_base64():
+@pytest.mark.asyncio
+async def test_parse_prompt_base64():
     # Base64 string > 8 chars to trigger detector
     prompt = "aGVsbG8gd29ybGQ="
     result = parse_prompt(prompt)

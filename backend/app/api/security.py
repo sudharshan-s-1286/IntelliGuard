@@ -40,7 +40,7 @@ async def analyze_prompt(request: AnalyzeRequest):
         raise HTTPException(status_code=400, detail="Prompt cannot be empty.")
 
     # Call the standardized process() orchestration method
-    result = agent.process(request)
+    result = await agent.process(request)
     
     if result.status == AgentStatus.ERROR:
         # 500 Internal Server Error using the standardized error message

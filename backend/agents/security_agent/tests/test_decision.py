@@ -1,7 +1,8 @@
 import pytest
-from agents.security_agent.decision import make_decision
+from backend.agents.security_agent.detectors.decision_engine import make_decision
 
-def test_make_decision_allow():
+@pytest.mark.asyncio
+async def test_make_decision_allow():
     assessment = {
         "risk_score": 10,
         "confidence": 0.1,
@@ -13,7 +14,8 @@ def test_make_decision_allow():
     assert decision["decision"] == "ALLOW"
     assert "safe" in decision["explanation"].lower()
 
-def test_make_decision_block():
+@pytest.mark.asyncio
+async def test_make_decision_block():
     assessment = {
         "risk_score": 90,
         "confidence": 0.9,
