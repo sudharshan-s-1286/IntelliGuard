@@ -1,11 +1,13 @@
-import time
 import logging
+
 from fastapi import APIRouter, HTTPException
 
-from agents.security_agent.agent import SecurityAgent
-from agents.security_agent.schemas import AnalyzeRequest
-from shared.response_models import AgentResponse
-from shared.enums import AgentStatus
+from backend.agents.security_agent.agent import (
+    AgentResponse,
+    AgentStatus,
+    SecurityAgent,
+)
+from backend.agents.security_agent.models.communication import AnalyzeRequest
 
 router = APIRouter(
     prefix="/api/security",

@@ -1,6 +1,7 @@
 """LLM Classifier."""
 from typing import Any
 
+
 class LLMClassifier:
     """Handles fallback classification using powerful LLMs."""
 
@@ -13,5 +14,3 @@ class LLMClassifier:
         :param prompt: The ambiguous prompt.
         :return: A list of Findings.
         """
-        # TODO: Apply prompt templates and parse LLM response
-        pass

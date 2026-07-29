@@ -1,12 +1,13 @@
-import sys
-import os
-import time
 import concurrent.futures
+import os
+import sys
+import time
 
 # Set sys.path manually for direct script execution
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
 
-from agents.security_agent.agent import SecurityAgent
+from backend.agents.security_agent.agent import SecurityAgent
+
 
 def run_request(prompt):
     agent = SecurityAgent()

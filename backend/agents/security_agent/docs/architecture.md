@@ -4,7 +4,7 @@ The IntelliGuard Security Agent is an enterprise-ready pipeline designed to anal
 
 ## Core Pipeline
 
-When the orchestrator sends a prompt to the `SecurityAgent.process()` method, it flows through the following asynchronous stages:
+When an API client sends a prompt to the `SecurityAgent.process()` method, it flows through the following asynchronous stages:
 
 1. **Input Normalization (`request_validator.py`)**: Sanitizes and normalizes the raw prompt, flagging standard obfuscations (Base64, Hex).
 2. **Decision Engine Orchestration (`decision_engine.py`)**: 

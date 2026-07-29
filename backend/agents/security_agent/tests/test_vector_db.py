@@ -1,15 +1,19 @@
-import os
 import json
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
-from backend.agents.security_agent.repositories.qdrant_service import QdrantService
-from backend.agents.security_agent.repositories.knowledge_repository import KnowledgeRepository
-from backend.agents.security_agent.services.knowledge_ingestion_service import KnowledgeIngestionService
+import pytest
+
+from backend.agents.security_agent.ai.embeddings import EmbeddingService
 from backend.agents.security_agent.knowledge.manager import KnowledgeManager
 from backend.agents.security_agent.models.domain import VectorMetadata
-from backend.agents.security_agent.ai.embeddings import EmbeddingService
-from backend.agents.security_agent.config import settings
+from backend.agents.security_agent.repositories.knowledge_repository import (
+    KnowledgeRepository,
+)
+from backend.agents.security_agent.repositories.qdrant_service import QdrantService
+from backend.agents.security_agent.services.knowledge_ingestion_service import (
+    KnowledgeIngestionService,
+)
+
 
 @pytest.fixture
 def qdrant_service():

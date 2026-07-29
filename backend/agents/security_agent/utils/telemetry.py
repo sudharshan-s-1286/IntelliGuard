@@ -1,9 +1,8 @@
 """Enterprise Telemetry & Audit Logging."""
 import logging
-import time
-from typing import Dict, Any, List
-from datetime import datetime, UTC
 import uuid
+from datetime import UTC, datetime
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -30,14 +29,14 @@ class MetricsRegistry:
         self._metrics["total_processing_time_ms"] += processing_time_ms
         self._metrics["last_request_time"] = datetime.now(UTC).isoformat().replace('+00:00', 'Z')
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """Return a copy of the current metrics."""
         return self._metrics.copy()
 
 class AuditLogger:
     """Enterprise audit logger for security events."""
     
-    def log_event(self, event_type: str, data: Dict[str, Any]) -> str:
+    def log_event(self, event_type: str, data: dict[str, Any]) -> str:
         """
         Log a structured audit event.
         Returns the unique trace ID for the event.

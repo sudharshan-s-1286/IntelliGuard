@@ -1,12 +1,13 @@
-import pytest
-import json
 import asyncio
 from unittest.mock import AsyncMock, patch
 
-from backend.agents.security_agent.llm.classifier import LLMClassifier
-from backend.agents.security_agent.llm.providers import MockProvider, OpenAIProvider
-from backend.agents.security_agent.models.domain import Finding, Threat
+import pytest
+
 from backend.agents.security_agent.config import settings
+from backend.agents.security_agent.llm.classifier import LLMClassifier
+from backend.agents.security_agent.llm.providers import MockProvider
+from backend.agents.security_agent.models.domain import Finding, Threat
+
 
 @pytest.fixture
 def prior_findings():

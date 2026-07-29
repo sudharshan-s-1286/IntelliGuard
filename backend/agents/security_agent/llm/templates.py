@@ -1,6 +1,5 @@
 """LLM Prompt Templates."""
 import json
-from typing import List, Dict, Any
 
 from backend.agents.security_agent.models.domain import Finding
 
@@ -19,7 +18,7 @@ You must ALWAYS output valid JSON strictly matching the following schema. Never 
 }
 """
 
-def build_classification_prompt(prompt: str, prior_findings: List[Finding]) -> str:
+def build_classification_prompt(prompt: str, prior_findings: list[Finding]) -> str:
     """Build the prompt injecting context and rules."""
     
     context = []

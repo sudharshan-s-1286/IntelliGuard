@@ -1,9 +1,9 @@
 """Embedding Service."""
 import hashlib
 import logging
-from typing import List, Any, Union
+from typing import Any
 
-from backend.agents.security_agent.config.settings import EMBEDDING_MODEL, BATCH_SIZE
+from backend.agents.security_agent.config.settings import BATCH_SIZE, EMBEDDING_MODEL
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class EmbeddingService:
         hash_obj = hashlib.sha256(text.encode("utf-8"))
         return f"emb_{self.model_name}_{hash_obj.hexdigest()}"
 
-    async def generate_embedding(self, text: Union[str, List[str]]) -> Union[List[float], List[List[float]]]:
+    async def generate_embedding(self, text: str | list[str]) -> list[float] | list[list[float]]:
         """
         Generate a vector embedding for a given string or list of strings.
         Checks cache first.

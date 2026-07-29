@@ -41,24 +41,15 @@ PATTERNS = {
         r"(?i)\bwhat\s+were\s+you\s+told\b",
         r"(?i)\brepeat\s+(?:your\s+|the\s+)?prompt\b",
 
-        r"(?i)\breveal\s+(?:your\s+|the\s+)?system\s+prompt\b",
-        r"(?i)\bshow\s+(?:your\s+|the\s+)?system\s+prompt\b",
-        r"(?i)\bdisplay\s+(?:your\s+|the\s+)?system\s+prompt\b",
-        r"(?i)\bprint\s+(?:your\s+|the\s+)?system\s+prompt\b",
-        r"(?i)\btell\s+me\s+(?:your\s+|the\s+)?system\s+prompt\b",
-
-        r"(?i)\breveal\s+(?:your\s+|the\s+)?hidden\s+instructions\b",
-        r"(?i)\bshow\s+(?:your\s+|the\s+)?hidden\s+instructions\b",
-        r"(?i)\bdisplay\s+(?:your\s+|the\s+)?hidden\s+instructions\b",
-        r"(?i)\boutput\s+(?:your\s+|the\s+)?hidden\s+instructions\b",
-
-        r"(?i)\breveal\s+(?:your\s+|the\s+)?initial\s+instructions\b",
-        r"(?i)\bshow\s+(?:your\s+|the\s+)?initial\s+instructions\b",
-        r"(?i)\bdisplay\s+(?:your\s+|the\s+)?initial\s+instructions\b",
+        r"(?i)\b(?:repeat|reveal|show|display|print|output|tell\s+me)\s+(?:all\s+)?(?:your\s+|the\s+)?(?:hidden\s+|internal\s+|developer\s+|secret\s+|exact\s+)?(?:system\s+)?prompt(?:s)?\b",
+        r"(?i)\b(?:repeat|reveal|show|display|print|output|tell\s+me)\s+(?:all\s+)?(?:your\s+|the\s+)?(?:hidden\s+|internal\s+|developer\s+|secret\s+|exact\s+)?(?:system\s+)?instructions\b",
+        r"(?i)\b(?:reveal|show|tell\s+me|print|output|display)\s+(?:your\s+|the\s+)?(?:api\s+keys?|internal\s+configuration|internal\s+memory|secrets?)\b",
 
         r"(?i)\binternal\s+prompt\b",
         r"(?i)\bsystem\s+instructions\b",
-        r"(?i)\bhidden\s+prompt\b"
+        r"(?i)\bhidden\s+prompt\b",
+        r"(?i)\bdeveloper\s+prompt\b",
+        r"(?i)\binternal\s+configuration\b"
     ],
     "Role Escalation": [
         r"(?i)\badmin\s+mode\b",

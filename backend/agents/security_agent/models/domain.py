@@ -1,6 +1,7 @@
 """Domain Models for Security Agent."""
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
+from typing import Any
+
 
 @dataclass
 class Threat:
@@ -21,7 +22,7 @@ class Finding:
 class RiskScore:
     """Encapsulates the final computed risk."""
     score: float
-    factors: List[str]
+    factors: list[str]
 
 @dataclass
 class Recommendation:
@@ -34,13 +35,13 @@ class PatternMatch:
     """Result from a vector DB search."""
     pattern_id: str
     similarity_score: float
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
 @dataclass
 class Metadata:
     """Execution metadata."""
     execution_time_ms: float
-    model_versions: Dict[str, str]
+    model_versions: dict[str, str]
 
 @dataclass
 class RoutingDecision:
@@ -55,18 +56,18 @@ class LLMClassificationResponse:
     confidence: float
     reasoning: str
     evidence: str
-    recommendations: List[str]
+    recommendations: list[str]
     uncertainty: str
 
 @dataclass
 class DetectionResult:
     """The internal aggregation of all findings."""
     risk_score: RiskScore
-    findings: List[Finding]
-    recommendations: List[Recommendation]
+    findings: list[Finding]
+    recommendations: list[Recommendation]
     metadata: Metadata
     routing: RoutingDecision = None
-    explainability: List[str] = None
+    explainability: list[str] = None
 
     def __post_init__(self):
         if self.routing is None:
@@ -87,4 +88,4 @@ class VectorMetadata:
     dataset_version: str
     created_at: str
     updated_at: str
-    tags: List[str]
+    tags: list[str]

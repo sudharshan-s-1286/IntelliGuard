@@ -1,12 +1,15 @@
-import pytest
-from unittest.mock import AsyncMock, MagicMock
 import asyncio
+from unittest.mock import AsyncMock, MagicMock
 
-from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
+import pytest
+
 from backend.agents.security_agent.ai.embeddings import EmbeddingService
-from backend.agents.security_agent.repositories.knowledge_repository import KnowledgeRepository
+from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
 from backend.agents.security_agent.models.domain import PatternMatch
-from backend.agents.security_agent.config import settings
+from backend.agents.security_agent.repositories.knowledge_repository import (
+    KnowledgeRepository,
+)
+
 
 @pytest.fixture
 def embedding_service():

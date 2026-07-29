@@ -1,5 +1,7 @@
 import pytest
+
 from backend.agents.security_agent.validators.request_validator import parse_prompt
+
 
 @pytest.mark.asyncio
 async def test_parse_prompt_normal():

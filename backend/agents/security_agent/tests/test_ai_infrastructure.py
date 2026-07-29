@@ -1,9 +1,11 @@
+
 import pytest
-import asyncio
-from backend.agents.security_agent.services.cache_service import CacheService
-from backend.agents.security_agent.services.model_loader import ModelLoader
+
 from backend.agents.security_agent.ai.embeddings import EmbeddingService
 from backend.agents.security_agent.config import settings
+from backend.agents.security_agent.services.cache_service import CacheService
+from backend.agents.security_agent.services.model_loader import ModelLoader
+
 
 @pytest.fixture
 def cache_service():

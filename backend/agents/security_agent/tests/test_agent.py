@@ -1,8 +1,9 @@
+from unittest.mock import AsyncMock, patch
+
 import pytest
-import asyncio
-from unittest.mock import patch, AsyncMock, MagicMock
 
 from backend.agents.security_agent.agent import SecurityAgent
+
 
 class MockRequest:
     def __init__(self, prompt):
@@ -31,7 +32,12 @@ async def test_agent_initialization(MockLLM, MockDecision, MockSemantic, agent):
 @pytest.mark.asyncio
 async def test_agent_process_benign_prompt(agent):
     # Setup mock pipeline
-    from backend.agents.security_agent.models.domain import DetectionResult, RoutingDecision, RiskScore, Metadata
+    from backend.agents.security_agent.models.domain import (
+        DetectionResult,
+        Metadata,
+        RiskScore,
+        RoutingDecision,
+    )
     
     # Mock initialize
     await agent.initialize()
@@ -62,7 +68,14 @@ async def test_agent_process_benign_prompt(agent):
 
 @pytest.mark.asyncio
 async def test_agent_process_malicious_llm_fallback(agent):
-    from backend.agents.security_agent.models.domain import DetectionResult, RoutingDecision, RiskScore, Metadata, Finding, Threat
+    from backend.agents.security_agent.models.domain import (
+        DetectionResult,
+        Finding,
+        Metadata,
+        RiskScore,
+        RoutingDecision,
+        Threat,
+    )
     
     await agent.initialize()
     

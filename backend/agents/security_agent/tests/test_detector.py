@@ -1,5 +1,7 @@
 import pytest
+
 from backend.agents.security_agent.detectors.rule_engine import run_all_detectors
+
 
 @pytest.mark.asyncio
 async def test_run_all_detectors_safe():

@@ -1,7 +1,8 @@
 """LLM Provider Abstractions."""
-from abc import ABC, abstractmethod
-import logging
 import json
+import logging
+from abc import ABC, abstractmethod
+
 from backend.agents.security_agent.config import settings
 
 logger = logging.getLogger(__name__)
@@ -12,12 +13,10 @@ class LLMProvider(ABC):
     @abstractmethod
     async def generate(self, prompt: str) -> str:
         """Generate a raw string response from the LLM."""
-        pass
         
     @abstractmethod
     def health(self) -> dict:
         """Health check for the provider."""
-        pass
 
 class MockProvider(LLMProvider):
     """Mock provider for testing or fallback when no API key is provided."""

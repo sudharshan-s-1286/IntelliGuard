@@ -6,7 +6,10 @@ using a centralized pattern-matching engine.
 import re
 
 from backend.agents.security_agent.knowledge.static_patterns import PATTERNS
-from backend.agents.security_agent.validators.request_validator import calculate_confidence, match_patterns
+from backend.agents.security_agent.validators.request_validator import (
+    calculate_confidence,
+    match_patterns,
+)
 
 
 def _build_result(attack_name: str, matched_patterns: list, custom_confidence: float | None = None) -> dict:

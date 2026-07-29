@@ -1,8 +1,8 @@
 """Security Report Generator."""
-from typing import Dict, Any
 
-from backend.agents.security_agent.models.domain import DetectionResult
 from backend.agents.security_agent.models.communication import SecurityAgentResponse
+from backend.agents.security_agent.models.domain import DetectionResult
+
 
 class ReportGenerator:
     """Generates standardized security reports from DetectionResults."""
@@ -13,7 +13,7 @@ class ReportGenerator:
     def generate(self, result: DetectionResult, original_prompt: str, was_encoded: bool) -> SecurityAgentResponse:
         """
         Convert a core DetectionResult into the standardized SecurityAgentResponse 
-        expected by the broader IntelliGuard orchestrator.
+        expected by the broader IntelliGuard API.
         """
         # Format findings for the legacy schema
         formatted_findings = []
@@ -27,7 +27,7 @@ class ReportGenerator:
                 "matched_patterns": [f.evidence] if f.evidence else []
             })
             
-        # Decision Logic (Legacy Orchestrator compatibility)
+        # Decision Logic
         if result.risk_score.score >= 50:
             decision = "BLOCK"
             explanation = f"High risk score ({result.risk_score.score}) warrants blocking."

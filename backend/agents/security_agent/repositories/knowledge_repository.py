@@ -1,10 +1,10 @@
 """Knowledge Repository."""
 import logging
-from typing import List, Dict, Any, Optional
+from typing import Any
 
-from backend.agents.security_agent.repositories.qdrant_service import QdrantService
-from backend.agents.security_agent.models.domain import VectorMetadata, PatternMatch
 from backend.agents.security_agent.config import settings
+from backend.agents.security_agent.models.domain import PatternMatch, VectorMetadata
+from backend.agents.security_agent.repositories.qdrant_service import QdrantService
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ class KnowledgeRepository:
                 distance=settings.DISTANCE_METRIC
             )
 
-    async def store_attack_patterns(self, vectors: List[List[float]], metadata_list: List[VectorMetadata]) -> None:
+    async def store_attack_patterns(self, vectors: list[list[float]], metadata_list: list[VectorMetadata]) -> None:
         """Store new attack patterns into the vector database."""
         if not vectors or len(vectors) != len(metadata_list):
             raise ValueError("Vectors and metadata lists must be of the same non-zero length.")
@@ -68,12 +68,12 @@ class KnowledgeRepository:
         except ImportError:
             logger.warning("qdrant-client not installed. Skipping store operation.")
 
-    async def search_by_embedding(self, vector: List[float], limit: int = 5, category: Optional[str] = None) -> List[PatternMatch]:
+    async def search_by_embedding(self, vector: list[float], limit: int = 5, category: str | None = None) -> list[PatternMatch]:
         """Search the database by vector similarity, optionally filtering by category."""
         query_filter = None
         
         try:
-            from qdrant_client.models import Filter, FieldCondition, MatchValue
+            from qdrant_client.models import FieldCondition, Filter, MatchValue
             if category:
                 query_filter = Filter(
                     must=[
@@ -104,7 +104,7 @@ class KnowledgeRepository:
             )
         return matches
 
-    async def delete_patterns(self, pattern_ids: List[str]) -> None:
+    async def delete_patterns(self, pattern_ids: list[str]) -> None:
         """Remove patterns from the knowledge base."""
         await self.db.delete_vectors(self.collection_name, pattern_ids)
 

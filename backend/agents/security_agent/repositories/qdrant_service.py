@@ -1,6 +1,6 @@
 """Qdrant Service."""
 import logging
-from typing import List, Dict, Any, Optional
+from typing import Any
 
 from backend.agents.security_agent.config import settings
 
@@ -48,7 +48,7 @@ class QdrantService:
         """Create a new collection."""
         if self._is_mock:
             return
-        from qdrant_client.models import VectorParams, Distance
+        from qdrant_client.models import Distance, VectorParams
         dist_enum = getattr(Distance, distance.upper(), Distance.COSINE)
         await self.client.create_collection(
             collection_name=collection_name,
@@ -61,7 +61,7 @@ class QdrantService:
             return
         await self.client.delete_collection(collection_name=collection_name)
 
-    async def upsert_vectors(self, collection_name: str, points: List[Any]) -> None:
+    async def upsert_vectors(self, collection_name: str, points: list[Any]) -> None:
         """Upsert a list of points (qdrant_client.models.PointStruct)."""
         if self._is_mock:
             return
@@ -70,7 +70,7 @@ class QdrantService:
             points=points
         )
 
-    async def delete_vectors(self, collection_name: str, point_ids: List[str]) -> None:
+    async def delete_vectors(self, collection_name: str, point_ids: list[str]) -> None:
         """Delete specific vectors by ID."""
         if self._is_mock:
             return
@@ -83,10 +83,10 @@ class QdrantService:
     async def search_nearest_neighbors(
         self, 
         collection_name: str, 
-        vector: List[float], 
+        vector: list[float], 
         limit: int = 5, 
-        query_filter: Optional[Any] = None
-    ) -> List[Any]:
+        query_filter: Any | None = None
+    ) -> list[Any]:
         """
         Perform a semantic search in Qdrant with optional metadata filtering.
         """

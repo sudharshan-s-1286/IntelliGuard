@@ -1,15 +1,21 @@
 """LLM Classifier."""
-import logging
-import json
 import asyncio
-from typing import List
+import json
+import logging
 
-from backend.agents.security_agent.models.domain import (
-    Finding, Threat, DetectionResult, RiskScore, Metadata, RoutingDecision, LLMClassificationResponse, Recommendation
-)
+from backend.agents.security_agent.config import settings
 from backend.agents.security_agent.llm.providers import get_provider
 from backend.agents.security_agent.llm.templates import build_classification_prompt
-from backend.agents.security_agent.config import settings
+from backend.agents.security_agent.models.domain import (
+    DetectionResult,
+    Finding,
+    LLMClassificationResponse,
+    Metadata,
+    Recommendation,
+    RiskScore,
+    RoutingDecision,
+    Threat,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -26,10 +32,8 @@ class LLMClassifier:
         try:
             # LLMs sometimes wrap json in markdown blocks like ```json ... ```
             cleaned = raw_json.strip()
-            if cleaned.startswith("```json"):
-                cleaned = cleaned[7:]
-            if cleaned.endswith("```"):
-                cleaned = cleaned[:-3]
+            cleaned = cleaned.removeprefix("```json")
+            cleaned = cleaned.removesuffix("```")
             
             data = json.loads(cleaned.strip())
             return LLMClassificationResponse(
@@ -44,7 +48,7 @@ class LLMClassifier:
             logger.error(f"Failed to parse LLM JSON response: {e}\nRaw: {raw_json}")
             raise ValueError(f"Malformed JSON: {e}")
 
-    async def classify(self, prompt: str, prior_findings: List[Finding]) -> DetectionResult:
+    async def classify(self, prompt: str, prior_findings: list[Finding]) -> DetectionResult:
         """
         Consult the LLM to make a final classification on the prompt.
         """
@@ -101,7 +105,7 @@ class LLMClassifier:
         recs = [Recommendation(action=r, priority="High") for r in parsed_response.recommendations]
         
         explainability = [
-            f"LLM Classification invoked.",
+            "LLM Classification invoked.",
             f"Category: {parsed_response.attack_category}, Confidence: {parsed_response.confidence}",
             f"Uncertainty: {parsed_response.uncertainty}",
             f"Reasoning: {parsed_response.reasoning}"

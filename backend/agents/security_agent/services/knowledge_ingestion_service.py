@@ -1,12 +1,14 @@
 """Knowledge Ingestion Service."""
 import json
 import logging
-from datetime import datetime
-from typing import Any, List, Dict
+from datetime import datetime, UTC
+from typing import Any
 
 from backend.agents.security_agent.ai.embeddings import EmbeddingService
-from backend.agents.security_agent.repositories.knowledge_repository import KnowledgeRepository
 from backend.agents.security_agent.models.domain import VectorMetadata
+from backend.agents.security_agent.repositories.knowledge_repository import (
+    KnowledgeRepository,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +19,7 @@ class KnowledgeIngestionService:
         self.embedding_service = embedding_service
         self.repository = repository
 
-    def _parse_json(self, filepath: str) -> List[Dict[str, Any]]:
+    def _parse_json(self, filepath: str) -> list[dict[str, Any]]:
         """Parse JSON dataset."""
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
@@ -32,7 +34,7 @@ class KnowledgeIngestionService:
             logger.error(f"Failed to parse JSON file {filepath}: {e}")
             raise
 
-    def _normalize_metadata(self, item: Dict[str, Any], dataset_version: str) -> VectorMetadata:
+    def _normalize_metadata(self, item: dict[str, Any], dataset_version: str) -> VectorMetadata:
         """Map raw dictionary to VectorMetadata schema."""
         return VectorMetadata(
             pattern_id=str(item.get("id") or item.get("pattern_id")),
@@ -43,8 +45,8 @@ class KnowledgeIngestionService:
             description=item.get("description", ""),
             source=item.get("source", "internal_dataset"),
             dataset_version=dataset_version,
-            created_at=item.get("created_at", datetime.utcnow().isoformat()),
-            updated_at=datetime.utcnow().isoformat(),
+            created_at=item.get("created_at", datetime.now(UTC).isoformat()),
+            updated_at=datetime.now(UTC).isoformat(),
             tags=item.get("tags", [])
         )
 

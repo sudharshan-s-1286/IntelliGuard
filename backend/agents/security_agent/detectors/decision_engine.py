@@ -1,12 +1,19 @@
 """Decision Engine."""
-import logging
-from typing import List, Dict, Any
 import asyncio
+import logging
+from typing import Any
 
+from backend.agents.security_agent.config import settings
 from backend.agents.security_agent.detectors.rule_engine import run_all_detectors
 from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
-from backend.agents.security_agent.models.domain import Finding, Threat, DetectionResult, RiskScore, Metadata, RoutingDecision
-from backend.agents.security_agent.config import settings
+from backend.agents.security_agent.models.domain import (
+    DetectionResult,
+    Finding,
+    Metadata,
+    RiskScore,
+    RoutingDecision,
+    Threat,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +37,7 @@ class DecisionEngine:
 
         # 1. Execute detectors concurrently
         # Wrap the synchronous rule engine in an async wrapper
-        async def _run_rule_engine() -> List[Finding]:
+        async def _run_rule_engine() -> list[Finding]:
             results_dict = run_all_detectors(prompt)
             return self._normalize_rule_output(results_dict)
 
@@ -79,7 +86,7 @@ class DecisionEngine:
             explainability=explainability
         )
 
-    def _normalize_rule_output(self, raw_results: Dict[str, Any]) -> List[Finding]:
+    def _normalize_rule_output(self, raw_results: dict[str, Any]) -> list[Finding]:
         """Convert Rule Engine dictionary output into Finding objects."""
         findings = []
         severity_map = {"CRITICAL": 1.0, "HIGH": 0.8, "MEDIUM": 0.5, "LOW": 0.2, "NONE": 0.0}
@@ -103,9 +110,9 @@ class DecisionEngine:
                 ))
         return findings
 
-    def _resolve_duplicates(self, findings: List[Finding], explainability: List[str]) -> List[Finding]:
+    def _resolve_duplicates(self, findings: list[Finding], explainability: list[str]) -> list[Finding]:
         """Merge findings with the same category across detectors."""
-        grouped: Dict[str, List[Finding]] = {}
+        grouped: dict[str, list[Finding]] = {}
         for f in findings:
             grouped.setdefault(f.threat.category, []).append(f)
 
@@ -144,7 +151,7 @@ class DecisionEngine:
             
         return merged
 
-    def _determine_routing(self, rule_findings: List[Finding], semantic_findings: List[Finding], merged_findings: List[Finding], explainability: List[str]) -> tuple[bool, str]:
+    def _determine_routing(self, rule_findings: list[Finding], semantic_findings: list[Finding], merged_findings: list[Finding], explainability: list[str]) -> tuple[bool, str]:
         """Decide if the prompt needs to be routed to the LLM."""
         
         # 1. Check for low confidence / ambiguous results

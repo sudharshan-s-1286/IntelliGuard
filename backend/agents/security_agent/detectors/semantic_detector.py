@@ -1,12 +1,14 @@
 """Semantic Detector."""
-import logging
-from typing import List, Any
 import asyncio
+import logging
+from typing import Any
 
 from backend.agents.security_agent.ai.embeddings import EmbeddingService
-from backend.agents.security_agent.repositories.knowledge_repository import KnowledgeRepository
-from backend.agents.security_agent.models.domain import Finding, Threat
 from backend.agents.security_agent.config import settings
+from backend.agents.security_agent.models.domain import Finding, Threat
+from backend.agents.security_agent.repositories.knowledge_repository import (
+    KnowledgeRepository,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +30,7 @@ class SemanticDetector:
             return "Medium"
         return "Low"
 
-    async def evaluate(self, prompt: str) -> List[Finding]:
+    async def evaluate(self, prompt: str) -> list[Finding]:
         """
         Evaluate the prompt semantically against the vector database.
         :param prompt: The input prompt.

@@ -1,6 +1,6 @@
-import pytest
 from backend.agents.security_agent.detectors.risk_scorer import calculate_risk_score
 from backend.agents.security_agent.models.domain import Finding, Threat
+
 
 def test_calculate_risk_score_safe():
     findings = []

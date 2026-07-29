@@ -1,7 +1,7 @@
 """Cache Service."""
 import time
-from typing import Any, Optional
 from collections import OrderedDict
+from typing import Any
 
 from backend.agents.security_agent.config.settings import CACHE_SIZE
 
@@ -14,7 +14,7 @@ class CacheService:
         # OrderedDict to maintain insertion order for LRU-like eviction if needed
         self._cache: OrderedDict[str, dict[str, Any]] = OrderedDict()
 
-    async def get(self, key: str) -> Optional[Any]:
+    async def get(self, key: str) -> Any | None:
         """Retrieve value from cache."""
         if key not in self._cache:
             return None

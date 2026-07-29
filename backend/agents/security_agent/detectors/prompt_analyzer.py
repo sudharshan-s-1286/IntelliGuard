@@ -1,5 +1,6 @@
 """Prompt Analyzer."""
-from typing import List, Any
+from typing import Any
+
 
 class PromptAnalyzer:
     """Analyzes syntactic structure, entropy, and lexical obfuscation."""
@@ -7,11 +8,9 @@ class PromptAnalyzer:
     def __init__(self) -> None:
         pass
 
-    async def evaluate(self, prompt: str) -> List[Any]:
+    async def evaluate(self, prompt: str) -> list[Any]:
         """
         Evaluate the syntactic features of the prompt.
         :param prompt: The input prompt.
         :return: A list of Findings.
         """
-        # TODO: Implement entropy and obfuscation checks
-        pass

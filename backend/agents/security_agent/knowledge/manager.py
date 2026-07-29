@@ -1,10 +1,14 @@
 """Knowledge Manager."""
 import logging
 import os
-from typing import Any, Dict
+from typing import Any
 
-from backend.agents.security_agent.services.knowledge_ingestion_service import KnowledgeIngestionService
-from backend.agents.security_agent.repositories.knowledge_repository import KnowledgeRepository
+from backend.agents.security_agent.repositories.knowledge_repository import (
+    KnowledgeRepository,
+)
+from backend.agents.security_agent.services.knowledge_ingestion_service import (
+    KnowledgeIngestionService,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +25,7 @@ class KnowledgeManager:
         """Initialize the manager and ensure the repository is ready."""
         await self.repository.initialize()
 
-    async def sync_dataset(self, filepath: str, version: str) -> Dict[str, Any]:
+    async def sync_dataset(self, filepath: str, version: str) -> dict[str, Any]:
         """
         Synchronize a dataset into the knowledge base if the version is newer.
         """

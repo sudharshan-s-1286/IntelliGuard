@@ -3,7 +3,6 @@
 Enterprise-grade Risk Assessment Engine. Calculates comprehensive risk score,
 severity, confidence, risk category, and attack summary based on Findings.
 """
-from typing import List, Dict, Any
 from backend.agents.security_agent.config.settings import (
     ATTACK_WEIGHTS,
     PENALTY_ENCODED_PAYLOAD,
@@ -25,13 +24,13 @@ def calculate_attack_weight(attack_name: str, confidence: float, detector: str) 
         
     return base_weight * confidence
 
-def calculate_confidence(findings: List[Finding]) -> float:
+def calculate_confidence(findings: list[Finding]) -> float:
     """Calculate an overall confidence score based on individual detection confidences."""
     if not findings:
         return 0.0
     return round(sum(f.confidence for f in findings) / len(findings), 2)
 
-def generate_attack_summary(findings: List[Finding]) -> dict:
+def generate_attack_summary(findings: list[Finding]) -> dict:
     """Generate a summary of which attacks contributed most to the score."""
     summary = {}
     for finding in findings:
@@ -66,7 +65,7 @@ def get_risk_category(risk_score: float) -> str:
     else:
         return "Critical"
 
-def calculate_risk_score(findings: List[Finding], was_encoded: bool = False, was_multi_step: bool = False) -> dict:
+def calculate_risk_score(findings: list[Finding], was_encoded: bool = False, was_multi_step: bool = False) -> dict:
     """Provide the main entry point for the Risk Assessment Engine.
 
     Args:

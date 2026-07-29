@@ -1,5 +1,7 @@
 import pytest
+
 from backend.agents.security_agent.services.remediation_service import remediate
+
 
 @pytest.mark.asyncio
 async def test_remediate_allow():

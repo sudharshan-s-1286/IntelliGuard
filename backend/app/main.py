@@ -1,8 +1,16 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import security
 
-app = FastAPI(title="IntelliGuard Backend")
+from backend.app.api import security
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await security.agent.initialize()
+    yield
+    await security.agent.cleanup()
+
+app = FastAPI(title="IntelliGuard Backend", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

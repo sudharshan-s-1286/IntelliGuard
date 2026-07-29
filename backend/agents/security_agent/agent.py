@@ -1,21 +1,16 @@
 """Agent Entry Point."""
-from typing import Any, Dict
-import time
-from datetime import datetime, UTC
 import logging
-import asyncio
+import time
+from typing import Any
 
-from backend.agents.security_agent.validators.request_validator import parse_prompt
-from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
 from backend.agents.security_agent.detectors.decision_engine import DecisionEngine
-from backend.agents.security_agent.llm.classifier import LLMClassifier
 from backend.agents.security_agent.detectors.risk_scorer import calculate_risk_score
+from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
+from backend.agents.security_agent.llm.classifier import LLMClassifier
+from backend.agents.security_agent.models.domain import RiskScore
 from backend.agents.security_agent.reporting.generator import ReportGenerator
 from backend.agents.security_agent.utils.telemetry import AuditLogger, MetricsRegistry
-
-from backend.agents.security_agent.models.communication import SecurityAgentResponse
-from backend.agents.security_agent.models.domain import RiskScore
-
+from backend.agents.security_agent.validators.request_validator import parse_prompt
 
 logger = logging.getLogger(__name__)
 
@@ -23,19 +18,23 @@ class AgentStatus:
     SUCCESS = "SUCCESS"
     ERROR = "ERROR"
 
-class AgentResponse:
-    def __init__(self, **kwargs):
-        self.kwargs = kwargs
-        for k,v in kwargs.items(): setattr(self, k, v)
-    def model_dump(self):
-        return self.kwargs
-    def dict(self):
-        return self.kwargs
+from pydantic import BaseModel
+
+
+class AgentResponse(BaseModel):
+    agent: str
+    status: str
+    version: str
+    processing_time_ms: float
+    result: dict | None = None
+    metadata: dict | None = None
+    error_code: str | None = None
+    message: str | None = None
 
 class SecurityAgent:
     """
     Security Agent implementation.
-    Acts as the facade for the Orchestrator, orchestrating the Enterprise Pipeline:
+    Acts as the facade for the security API, orchestrating the Enterprise Pipeline:
     DecisionEngine -> LLM Fallback -> RiskScorer -> ReportGenerator
     """
     def __init__(self):
@@ -67,11 +66,14 @@ class SecurityAgent:
         logger.info("Initializing Enterprise Security Agent...")
         
         from backend.agents.security_agent.ai.embeddings import EmbeddingService
-        from backend.agents.security_agent.repositories.knowledge_repository import KnowledgeRepository
-        from backend.agents.security_agent.repositories.qdrant_service import QdrantService
-        from backend.agents.security_agent.services.model_loader import ModelLoader
+        from backend.agents.security_agent.repositories.knowledge_repository import (
+            KnowledgeRepository,
+        )
+        from backend.agents.security_agent.repositories.qdrant_service import (
+            QdrantService,
+        )
         from backend.agents.security_agent.services.cache_service import CacheService
-        from backend.agents.security_agent.config import settings
+        from backend.agents.security_agent.services.model_loader import ModelLoader
 
         model_loader = ModelLoader()
         cache_service = CacheService()
@@ -192,7 +194,7 @@ class SecurityAgent:
 
     async def cleanup(self) -> None:
         """Close external connections."""
-        if self.semantic_detector:
+        if self.semantic_detector and hasattr(self.semantic_detector, "cleanup"):
             await self.semantic_detector.cleanup()
 
     async def health_check(self) -> Any:

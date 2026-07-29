@@ -1,9 +1,11 @@
-import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
 
 from backend.agents.security_agent.detectors.decision_engine import DecisionEngine
 from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
-from backend.agents.security_agent.models.domain import Finding, Threat, DetectionResult
+from backend.agents.security_agent.models.domain import Finding, Threat
+
 
 @pytest.fixture
 def semantic_detector():

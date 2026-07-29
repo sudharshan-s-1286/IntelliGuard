@@ -1,9 +1,12 @@
 """Model Loader."""
 import asyncio
 import logging
-from typing import Any, Dict
+from typing import Any
 
-from backend.agents.security_agent.config.settings import DEVICE_SELECTION, FALLBACK_TO_CPU
+from backend.agents.security_agent.config.settings import (
+    DEVICE_SELECTION,
+    FALLBACK_TO_CPU,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +14,7 @@ class ModelLoader:
     """Safely loads and unloads heavy AI models using a thread-safe singleton cache."""
 
     def __init__(self) -> None:
-        self._models: Dict[str, Any] = {}
+        self._models: dict[str, Any] = {}
         self._lock = asyncio.Lock()
 
     async def load_model(self, model_name: str) -> Any:
@@ -62,8 +65,9 @@ class ModelLoader:
                 
                 # Attempt to free PyTorch VRAM if applicable
                 try:
-                    import torch
                     import gc
+
+                    import torch
                     gc.collect()
                     if torch.cuda.is_available():
                         torch.cuda.empty_cache()
