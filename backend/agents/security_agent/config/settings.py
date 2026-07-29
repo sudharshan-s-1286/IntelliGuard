@@ -87,3 +87,12 @@ SEMANTIC_SEARCH_TIMEOUT = float(os.getenv("SEMANTIC_SEARCH_TIMEOUT", "2.0"))
 DECISION_LLM_ROUTING_THRESHOLD = float(os.getenv("DECISION_LLM_ROUTING_THRESHOLD", "0.6"))
 DECISION_FUSION_STRATEGY = os.getenv("DECISION_FUSION_STRATEGY", "max")
 DECISION_LLM_ON_CONFLICT = os.getenv("DECISION_LLM_ON_CONFLICT", "True").lower() in ("true", "1", "yes")
+
+# LLM Classifier Configuration
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "mock") # options: openai, azure, anthropic, mock
+LLM_API_KEY = os.getenv("LLM_API_KEY", "")
+LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME", "gpt-4-turbo")
+LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.0"))
+LLM_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "500"))
+LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "5.0"))
+LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "1"))

@@ -49,6 +49,16 @@ class RoutingDecision:
     reason: str
 
 @dataclass
+class LLMClassificationResponse:
+    """Structured output expected from the LLM."""
+    attack_category: str
+    confidence: float
+    reasoning: str
+    evidence: str
+    recommendations: List[str]
+    uncertainty: str
+
+@dataclass
 class DetectionResult:
     """The internal aggregation of all findings."""
     risk_score: RiskScore
