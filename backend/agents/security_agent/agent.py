@@ -1,15 +1,20 @@
 """Agent Entry Point."""
-from typing import Any
+from typing import Any, Dict
 import time
 from datetime import datetime, UTC
 import logging
+import asyncio
 
 from backend.agents.security_agent.validators.request_validator import parse_prompt
-from backend.agents.security_agent.detectors.rule_engine import run_all_detectors
+from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
+from backend.agents.security_agent.detectors.decision_engine import DecisionEngine
+from backend.agents.security_agent.llm.classifier import LLMClassifier
 from backend.agents.security_agent.detectors.risk_scorer import calculate_risk_score
-from backend.agents.security_agent.detectors.decision_engine import make_decision
-from backend.agents.security_agent.services.remediation_service import remediate
+from backend.agents.security_agent.reporting.generator import ReportGenerator
+from backend.agents.security_agent.utils.telemetry import AuditLogger, MetricsRegistry
+
 from backend.shared.models.communication import SecurityAgentResponse
+from backend.agents.security_agent.models.domain import RiskScore
 
 logger = logging.getLogger(__name__)
 
@@ -29,68 +34,93 @@ class AgentResponse:
 class SecurityAgent:
     """
     Security Agent implementation.
-    Acts as the facade for the Orchestrator, delegating to internal detectors.
+    Acts as the facade for the Orchestrator, orchestrating the Enterprise Pipeline:
+    DecisionEngine -> LLM Fallback -> RiskScorer -> ReportGenerator
     """
     def __init__(self):
-        self._metrics = {
-            "total_requests": 0,
-            "successful_requests": 0,
-            "failed_requests": 0,
-            "total_processing_time_ms": 0.0,
-            "last_request_time": None
-        }
         self._start_time = time.time()
         
-        # Mock audit logger for tests
-        class MockLogger:
-            def __init__(self):
-                self.storage = type('MockStorage', (), {'save': lambda self, *args: None})()
-            def log_event(self, data):
-                try:
-                    self.storage.save(data)
-                except Exception:
-                    pass
-        self.audit_logger = MockLogger()
+        # Telemetry
+        self.audit_logger = AuditLogger()
+        self.metrics = MetricsRegistry()
+        
+        # Subsystems
+        self.semantic_detector = None
+        self.decision_engine = None
+        self.llm_classifier = None
+        self.report_generator = ReportGenerator(agent_version=self.version())
 
     @property
     def name(self) -> str:
         return "security_agent"
-        
+
     def version(self) -> str:
         return "1.0.0"
-        
+
     def _metadata(self) -> dict:
-        return {}
+        return {"architecture": "hybrid_async"}
 
     async def initialize(self) -> None:
-        pass
+        """Initialize external connections (Qdrant, LLM clients)."""
+        logger.info("Initializing Enterprise Security Agent...")
+        
+        from backend.agents.security_agent.ai.embeddings import EmbeddingService
+        from backend.agents.security_agent.repositories.knowledge_repository import KnowledgeRepository
+        from backend.agents.security_agent.repositories.qdrant_service import QdrantService
+        from backend.agents.security_agent.services.model_loader import ModelLoader
+        from backend.agents.security_agent.services.cache_service import CacheService
+        from backend.agents.security_agent.config import settings
+
+        model_loader = ModelLoader()
+        cache_service = CacheService()
+        embedding_service = EmbeddingService(model_loader=model_loader, cache_service=cache_service)
+        await embedding_service.initialize()
+        
+        qdrant_service = QdrantService()
+        repository = KnowledgeRepository(qdrant_service=qdrant_service)
+        
+        self.semantic_detector = SemanticDetector(
+            embedding_service=embedding_service,
+            repository=repository
+        )
+        
+        if hasattr(self.semantic_detector, "initialize"):
+            await self.semantic_detector.initialize()
+            
+        self.decision_engine = DecisionEngine(self.semantic_detector)
+        self.llm_classifier = LLMClassifier()
+        logger.info("Security Agent successfully initialized.")
 
     async def validate(self, request: Any) -> None:
         pass
 
     async def process(self, request: Any) -> Any:
-        self._metrics["total_requests"] += 1
-        self._metrics["last_request_time"] = datetime.now(UTC).isoformat().replace('+00:00', 'Z')
+        self.metrics.increment("total_requests")
         process_start = time.time()
 
         try:
             prompt = request.prompt if hasattr(request, "prompt") else str(request)
-            result = await self.analyze(prompt)
+            result_dict = await self.analyze(prompt)
+            
             process_time_ms = (time.time() - process_start) * 1000
-            self._metrics["successful_requests"] += 1
-            self._metrics["total_processing_time_ms"] += process_time_ms
+            self.metrics.increment("successful_requests")
+            self.metrics.record_time(process_time_ms)
+            
             return AgentResponse(
                 agent="SecurityAgent",
                 status=AgentStatus.SUCCESS,
                 version=self.version(),
                 processing_time_ms=process_time_ms,
-                result=result,
+                result=result_dict,
                 metadata=self._metadata()
             )
         except Exception as e:
             logger.exception("[SecurityAgent] Process failed:")
-            self._metrics["failed_requests"] += 1
+            self.metrics.increment("failed_requests")
             process_time_ms = (time.time() - process_start) * 1000
+            
+            self.audit_logger.log_event("AGENT_ERROR", {"error": str(e), "latency_ms": process_time_ms})
+            
             return AgentResponse(
                 agent="SecurityAgent",
                 status=AgentStatus.ERROR,
@@ -107,76 +137,64 @@ class SecurityAgent:
         normalized_prompt = parsed["normalized"]
         was_encoded = parsed.get("was_encoded", False)
 
-        findings_dict = run_all_detectors(normalized_prompt, was_encoded=was_encoded)
-        assessment = calculate_risk_score(findings_dict)
-        decision_data = make_decision(assessment)
-        remediation_data = remediate(prompt, findings_dict, decision_data["decision"])
+        # 1. Orchestrate Standard Detectors
+        detection_result = await self.decision_engine.analyze(normalized_prompt)
 
-        formatted_findings = []
-        detected_attacks = []
-        matched_signatures = []
-        for data in findings_dict.values():
-            if data["detected"]:
-                formatted_findings.append({
-                    "detector": data["attack"],
-                    "confidence": data["confidence"],
-                    "severity": data["severity"],
-                    "reason": data["reason"],
-                    "matched_patterns": data.get("matched_patterns", [])
-                })
-                detected_attacks.append(data["attack"])
-                matched_signatures.extend(data.get("matched_patterns", []))
+        # 2. LLM Fallback (if ambiguity or conflict exists)
+        if detection_result.routing.needs_llm:
+            self.metrics.increment("llm_invocations")
+            try:
+                llm_result = await self.llm_classifier.classify(normalized_prompt, detection_result.findings)
+                # Append LLM findings, replace severity based on LLM output
+                detection_result.findings.extend(llm_result.findings)
+                detection_result.explainability.extend(llm_result.explainability)
+            except Exception as e:
+                self.metrics.increment("llm_failures")
+                logger.error(f"LLM Classification failed, proceeding with baseline findings: {e}")
+
+        # 3. Final Risk Scoring
+        risk_assessment = calculate_risk_score(detection_result.findings, was_encoded=was_encoded)
+        
+        # Inject the final risk score back into the DetectionResult so the ReportGenerator has it
+        detection_result.risk_score = RiskScore(
+            score=risk_assessment["risk_score"], 
+            factors=[
+                f"Confidence: {risk_assessment['confidence']}",
+                f"Severity: {risk_assessment['severity']}"
+            ]
+        )
+
+        # 4. Generate Standardized Report
+        report = self.report_generator.generate(detection_result, prompt, was_encoded)
+        
+        # Override the legacy loosely typed fields with our robust calculations
+        report.risk_category = risk_assessment["risk_category"]
+        report.severity = risk_assessment["severity"]
+        report.confidence = risk_assessment["confidence"]
+        report.attack_summary = risk_assessment["attack_summary"]
 
         duration_ms = (time.time() - start_time) * 1000
 
-        audit_event_data = {
+        # 5. Audit Logging
+        self.audit_logger.log_event("PROMPT_ANALYSIS", {
             "processing_time_ms": duration_ms,
             "original_prompt": prompt,
-            "normalized_prompt": normalized_prompt,
-            "detected_attacks": detected_attacks,
-            "matched_signatures": matched_signatures,
-            "risk_score": assessment["risk_score"],
-            "confidence": assessment["confidence"],
-            "severity": assessment["severity"],
-            "risk_category": assessment["risk_category"],
-            "decision": decision_data["decision"],
-            "remediation_applied": remediation_data["applied"],
-            "safe_prompt": remediation_data["safe_prompt"],
-            "explanation": decision_data["explanation"],
-            "justification": decision_data["justification"],
-            "recommended_action": decision_data["recommended_action"],
+            "detected_attacks": [f.threat.category for f in detection_result.findings],
+            "risk_score": report.risk_score,
+            "decision": report.decision,
+            "used_llm": detection_result.routing.needs_llm,
             "agent_version": self.version()
-        }
-        self.audit_logger.log_event(audit_event_data)
+        })
 
-        response = SecurityAgentResponse(
-            agent="SecurityAgent",
-            risk_score=assessment["risk_score"],
-            confidence=assessment["confidence"],
-            severity=assessment["severity"],
-            risk_category=assessment["risk_category"],
-            decision=decision_data["decision"],
-            findings=formatted_findings,
-            attack_summary=assessment["attack_summary"],
-            explanation=decision_data["explanation"],
-            justification=decision_data["justification"],
-            recommended_action=decision_data["recommended_action"],
-            safe_prompt=remediation_data["safe_prompt"],
-            remediation={
-                "applied": remediation_data["applied"],
-                "changes": remediation_data["changes"],
-                "confidence": remediation_data["confidence"],
-                "reason": remediation_data["reason"],
-                "safe_prompt": remediation_data["safe_prompt"]
-            }
-        )
-        return response.model_dump()
+        return report.model_dump()
 
     async def cleanup(self) -> None:
-        pass
+        """Close external connections."""
+        if self.semantic_detector:
+            await self.semantic_detector.cleanup()
 
     async def health_check(self) -> Any:
-        pass
+        return self.health()
 
     def health(self) -> dict[str, Any]:
         """Return the health status of the agent."""
@@ -185,11 +203,8 @@ class SecurityAgent:
             "status": "healthy",
             "uptime": f"{uptime_s:.2f}s",
             "version": self.version(),
+            "metrics": self.metrics.get_metrics(),
             "checks": {
-                "detector": True,
-                "scorer": True,
-                "audit": True,
-                "remediation": True
+                "llm_classifier": self.llm_classifier.health() if self.llm_classifier else None
             }
         }
-
