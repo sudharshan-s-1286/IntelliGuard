@@ -47,3 +47,18 @@ class DetectionResult:
     findings: List[Finding]
     recommendations: List[Recommendation]
     metadata: Metadata
+
+@dataclass
+class VectorMetadata:
+    """Metadata schema for stored vectors in Qdrant."""
+    pattern_id: str
+    category: str
+    attack_type: str
+    severity: str
+    owasp_mapping: str
+    description: str
+    source: str
+    dataset_version: str
+    created_at: str
+    updated_at: str
+    tags: List[str]

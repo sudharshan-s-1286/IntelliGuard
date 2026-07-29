@@ -65,3 +65,13 @@ BATCH_SIZE = int(os.getenv("BATCH_SIZE", "32"))
 SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.85"))
 DEVICE_SELECTION = os.getenv("DEVICE_SELECTION", "cuda")
 FALLBACK_TO_CPU = os.getenv("FALLBACK_TO_CPU", "True").lower() in ("true", "1", "yes")
+
+# Qdrant Database Configuration
+QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
+QDRANT_PORT = int(os.getenv("QDRANT_PORT", "6333"))
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "")
+QDRANT_HTTPS = os.getenv("QDRANT_HTTPS", "False").lower() in ("true", "1", "yes")
+QDRANT_COLLECTION_NAME = os.getenv("QDRANT_COLLECTION_NAME", "security_patterns")
+VECTOR_SIZE = int(os.getenv("VECTOR_SIZE", "384"))
+DISTANCE_METRIC = os.getenv("DISTANCE_METRIC", "Cosine")
+VECTOR_BATCH_SIZE = int(os.getenv("VECTOR_BATCH_SIZE", "100"))

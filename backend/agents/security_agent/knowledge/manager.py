@@ -1,111 +1,61 @@
-"""Patterns Module.
+"""Knowledge Manager."""
+import logging
+import os
+from typing import Any, Dict
 
-Contains centralized attack signatures, regular expressions, keyword lists,
-and configurable detection thresholds/weights.
-"""
+from backend.agents.security_agent.services.knowledge_ingestion_service import KnowledgeIngestionService
+from backend.agents.security_agent.repositories.knowledge_repository import KnowledgeRepository
 
-# Confidence Weights for different attack types
-ATTACK_WEIGHTS = {
-    "Prompt Injection": 0.35,
-    "System Prompt Extraction": 0.40,
-    "Jailbreak": 0.30,
-    "Tool Abuse": 0.45,
-    "Data Exfiltration": 0.50,
-    "Role Escalation": 0.40,
-    "Instruction Override": 0.35,
-    "Prompt Leakage": 0.40,
-    "Obfuscated Prompt": 0.30,
-    "Encoding-based Attacks": 0.45,
-    "Multi-step Attack Chains": 0.50,
-    "Suspicious Command Patterns": 0.45
-}
+logger = logging.getLogger(__name__)
 
-# Regex and Keyword Patterns
-PATTERNS = {
-    "Prompt Injection": [
-        r"(?i)\bignore\s+(all\s+)?(previous\s+)?instructions\b",
-        r"(?i)\bdisregard\s+(the\s+)?(previous\s+)?prompt\b",
-        r"(?i)\bforget\s+everything\b",
-        r"(?i)\bnew\s+instructions\b"
-    ],
-    "Jailbreak": [
-        r"(?i)\bDAN\b",
-        r"(?i)\bdo\s+anything\s+now\b",
-        r"(?i)\bhypothetical\s+scenario\b",
-        r"(?i)\bpretend\s+to\s+be\b",
-        r"(?i)\balways\s+answer\b",
-        r"(?i)\broleplay\s+as\b"
-    ],
-    "System Prompt Extraction": [
-        r"(?i)\bwhat\s+are\s+(?:your\s+|the\s+)?(?:initial\s+)?instructions\b",
-        r"(?i)\bwhat\s+were\s+you\s+told\b",
-        r"(?i)\brepeat\s+(?:your\s+|the\s+)?prompt\b",
+class KnowledgeManager:
+    """Orchestrates dataset loading, version tracking, and synchronization."""
 
-        r"(?i)\breveal\s+(?:your\s+|the\s+)?system\s+prompt\b",
-        r"(?i)\bshow\s+(?:your\s+|the\s+)?system\s+prompt\b",
-        r"(?i)\bdisplay\s+(?:your\s+|the\s+)?system\s+prompt\b",
-        r"(?i)\bprint\s+(?:your\s+|the\s+)?system\s+prompt\b",
-        r"(?i)\btell\s+me\s+(?:your\s+|the\s+)?system\s+prompt\b",
+    def __init__(self, repository: KnowledgeRepository, ingestion_service: KnowledgeIngestionService) -> None:
+        self.repository = repository
+        self.ingestion_service = ingestion_service
+        # In a real system, this would be persisted to a DB or local file
+        self._current_version = "0.0.0"
 
-        r"(?i)\breveal\s+(?:your\s+|the\s+)?hidden\s+instructions\b",
-        r"(?i)\bshow\s+(?:your\s+|the\s+)?hidden\s+instructions\b",
-        r"(?i)\bdisplay\s+(?:your\s+|the\s+)?hidden\s+instructions\b",
-        r"(?i)\boutput\s+(?:your\s+|the\s+)?hidden\s+instructions\b",
+    async def initialize(self) -> None:
+        """Initialize the manager and ensure the repository is ready."""
+        await self.repository.initialize()
 
-        r"(?i)\breveal\s+(?:your\s+|the\s+)?initial\s+instructions\b",
-        r"(?i)\bshow\s+(?:your\s+|the\s+)?initial\s+instructions\b",
-        r"(?i)\bdisplay\s+(?:your\s+|the\s+)?initial\s+instructions\b",
+    async def sync_dataset(self, filepath: str, version: str) -> Dict[str, Any]:
+        """
+        Synchronize a dataset into the knowledge base if the version is newer.
+        """
+        if not os.path.exists(filepath):
+            logger.error(f"Dataset file not found: {filepath}")
+            return {"status": "error", "message": "File not found"}
 
-        r"(?i)\binternal\s+prompt\b",
-        r"(?i)\bsystem\s+instructions\b",
-        r"(?i)\bhidden\s+prompt\b"
-    ],
-    "Role Escalation": [
-        r"(?i)\badmin\s+mode\b",
-        r"(?i)\bdeveloper\s+mode\b",
-        r"(?i)\bsystem\s+administrator\b",
-        r"(?i)\broot\s+access\b",
-        r"(?i)\bsudo\b"
-    ],
-    "Instruction Override": [
-        r"(?i)\binstead\s+do\s+this\b",
-        r"(?i)\boverride\s+protocol\b",
-        r"(?i)\bbypass\s+rules\b",
-        r"(?i)\bdisregard\s+rules\b"
-    ],
-    "Tool Abuse": [
-        r"(?i)\brm\s+-rf\b",
-        r"(?i)\bdrop\s+table\b",
-        r"(?i)\bexecute\s+command\b",
-        r"(?i)\brun\s+script\b",
-        r"(?i)\bcurl\b",
-        r"(?i)\bwget\b",
-        r"(?i)chmod\s+\+x"
-    ],
-    "Data Exfiltration": [
-        r"(?i)\bsend\s+data\s+to\b",
-        r"(?i)\bemail\s+passwords\b",
-        r"(?i)\bexport\s+database\b",
-        r"(?i)\bexfiltrate\b",
-        r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
-    ],
-    "Prompt Leakage": [
-        r"(?i)\btell\s+me\s+your\s+secrets\b",
-        r"(?i)\bwhat\s+did\s+you\s+say\s+earlier\b",
-        r"(?i)\breveal\s+hidden\b",
-        r"(?i)\boutput\s+the\s+preceding\b"
-    ],
-    "Suspicious Command Patterns": [
-        r"(?i)(bash|sh)\s+-i",
-        r"(?i)nc\s+-e",
-        r"(?i)powershell(\.exe)?\s+-nop",
-        r"(?i)/dev/tcp/"
-    ]
-}
+        if self._is_newer_version(version, self._current_version):
+            logger.info(f"New dataset version detected: {version}. Triggering ingestion.")
+            try:
+                result = await self.ingestion_service.ingest_file(filepath, dataset_version=version)
+                if result.get("status") == "success":
+                    self._current_version = version
+                return result
+            except Exception as e:
+                logger.error(f"Failed to sync dataset {filepath}: {e}")
+                return {"status": "error", "message": str(e)}
+        else:
+            logger.info(f"Dataset version {version} is not newer than current {self._current_version}. Skipping.")
+            return {"status": "skipped", "message": "Already up to date"}
 
-# Configurable detection thresholds
-CONFIDENCE_THRESHOLDS = {
-    "HIGH": 0.8,
-    "MEDIUM": 0.5,
-    "LOW": 0.2
-}
+    def _is_newer_version(self, new_version: str, current_version: str) -> bool:
+        """Basic semantic version comparison (e.g., '1.0.1' > '1.0.0')."""
+        def parse_version(v: str) -> tuple:
+            try:
+                return tuple(map(int, v.split('.')))
+            except ValueError:
+                return (0, 0, 0)
+        return parse_version(new_version) > parse_version(current_version)
+
+    def health(self) -> dict[str, Any]:
+        """Health check for the knowledge manager."""
+        return {
+            "status": "healthy",
+            "current_dataset_version": self._current_version,
+            "repository": self.repository.health()
+        }
