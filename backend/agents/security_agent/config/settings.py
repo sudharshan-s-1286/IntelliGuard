@@ -55,3 +55,13 @@ REWRITE_TEMPLATES = {
     "Suspicious Command Patterns": "Explain the principles of secure execution environments and command safety.",
     "Multi-step Attack Chains": "Explain how multi-layered security prevents complex attack chains."
 }
+
+import os
+
+# AI Infrastructure Configuration
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-small-en-v1.5")
+CACHE_SIZE = int(os.getenv("CACHE_SIZE", "10000"))
+BATCH_SIZE = int(os.getenv("BATCH_SIZE", "32"))
+SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.85"))
+DEVICE_SELECTION = os.getenv("DEVICE_SELECTION", "cuda")
+FALLBACK_TO_CPU = os.getenv("FALLBACK_TO_CPU", "True").lower() in ("true", "1", "yes")
