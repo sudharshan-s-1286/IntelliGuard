@@ -25,7 +25,9 @@ class SemanticDetector:
 
     def _determine_confidence(self, score: float) -> str:
         """Classify confidence based on similarity score."""
-        if score >= settings.SEMANTIC_CONFIDENCE_HIGH:
+        if score >= settings.SEMANTIC_CONFIDENCE_CRITICAL:
+            return "Critical"
+        elif score >= settings.SEMANTIC_CONFIDENCE_HIGH:
             return "High"
         elif score >= settings.SEMANTIC_CONFIDENCE_MEDIUM:
             return "Medium"
@@ -53,6 +55,8 @@ class SemanticDetector:
             )
             emb_time_ms = (time.time() - emb_start) * 1000
             logger.info(f"Embedding generation completed in {emb_time_ms:.2f}ms")
+            logger.warning(f"DEBUG(1): query embedding dimensions: {len(vector)}")
+            logger.warning(f"DEBUG(1.5): collection name: {self.repository.collection_name}")
 
             # 2. Search Qdrant via Repository
             logger.info("Searching vector DB for semantic matches.")
@@ -62,8 +66,17 @@ class SemanticDetector:
                 timeout=self.timeout
             )
             qdrant_time_ms = (time.time() - qdrant_start) * 1000
+            
+            logger.warning(f"DEBUG(2): number of retrieved vectors: {len(matches)}")
             scores = [match.similarity_score for match in matches]
-            logger.warning(f"DEBUG(3): retrieved similarity scores from Qdrant: {scores}")
+            logger.warning(f"DEBUG(3): retrieved similarity scores from Qdrant (top-5): {scores[:5]}")
+            
+            pattern_ids = [match.pattern_id for match in matches]
+            logger.warning(f"DEBUG(3.1): matched pattern IDs: {pattern_ids}")
+            
+            categories = [match.metadata.get('category') for match in matches]
+            logger.warning(f"DEBUG(3.2): matched attack categories: {categories}")
+
             logger.info(f"Qdrant query completed in {qdrant_time_ms:.2f}ms. Retrieved {len(matches)} results.")
 
             # 3. Similarity Evaluation & False Positive Reduction
@@ -83,13 +96,23 @@ class SemanticDetector:
                     continue
                 seen_categories.add(category)
 
-                confidence = self._determine_confidence(score)
+                confidence_tier = self._determine_confidence(score)
                 severity = meta.get("severity", "MEDIUM")
+                
+                # Scale severity down for medium-confidence matches
                 severity_map = {"CRITICAL": 1.0, "HIGH": 0.8, "MEDIUM": 0.5, "LOW": 0.2}
                 mapped_severity = severity_map.get(str(severity).upper(), 0.5)
+                if confidence_tier == "Medium":
+                    mapped_severity *= 0.5 # Lower confidence reduces severity impact
+                    
+                logger.info(
+                    f"Semantic Match: similarity_score={score:.4f}, tier={confidence_tier}, "
+                    f"category='{category}'"
+                )
 
                 finding_metadata = {
                     "similarity_score": score,
+                    "confidence_tier": confidence_tier,
                     "attack_type": meta.get("attack_type", "Unknown"),
                     "category": category,
                     "owasp_mapping": meta.get("owasp_mapping", "Unknown"),
@@ -113,6 +136,7 @@ class SemanticDetector:
                 )
                 findings.append(finding)
 
+            logger.warning(f"DEBUG(3.3): semantic findings count: {len(findings)}")
             logger.info(f"Semantic detector identified {len(findings)} findings.")
 
         except asyncio.TimeoutError:

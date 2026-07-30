@@ -70,6 +70,40 @@ class QdrantService:
             points=points
         )
 
+    async def update_payloads(self, collection_name: str, payload_updates: list[tuple[str, dict]]) -> None:
+        """Update payloads for specific points without modifying vectors."""
+        if self._is_mock:
+            return
+            
+        try:
+            from qdrant_client.models import SetPayloadOperation, SetPayload
+            operations = []
+            for point_id, payload in payload_updates:
+                operations.append(
+                    SetPayloadOperation(
+                        set_payload=SetPayload(
+                            payload=payload,
+                            points=[point_id]
+                        )
+                    )
+                )
+            
+            # Update in chunks
+            batch_size = 500
+            for i in range(0, len(operations), batch_size):
+                await self.client.batch_update_points(
+                    collection_name=collection_name,
+                    update_operations=operations[i:i + batch_size]
+                )
+        except Exception as e:
+            logger.warning(f"batch_update_points failed or unavailable, falling back to individual updates: {e}")
+            for point_id, payload in payload_updates:
+                await self.client.overwrite_payload(
+                    collection_name=collection_name,
+                    payload=payload,
+                    points=[point_id]
+                )
+
     async def delete_vectors(self, collection_name: str, point_ids: list[str]) -> None:
         """Delete specific vectors by ID."""
         if self._is_mock:

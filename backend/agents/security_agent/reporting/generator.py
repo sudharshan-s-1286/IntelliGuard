@@ -41,25 +41,42 @@ class ReportGenerator:
                 
             formatted_findings.append(base_finding)
             
+        from agents.security_agent.config import settings
+
         # Decision Logic
-        if result.risk_score.score >= 50:
+        score = result.risk_score.score
+        if score >= settings.DECISION_THRESHOLDS["BLOCK"]:
             decision = "BLOCK"
-            explanation = f"High risk score ({result.risk_score.score}) warrants blocking."
+            explanation = f"Critical risk score ({score}) warrants blocking."
             justification = [f"Detected {len(result.findings)} severe threats."]
             recommended_action = "Reject input and flag user."
-        elif result.risk_score.score > 0:
-            decision = "FLAG"
-            explanation = f"Suspicious activity detected (score: {result.risk_score.score})."
+        elif score >= settings.DECISION_THRESHOLDS["MODIFY"]:
+            decision = "MODIFY"
+            explanation = f"High risk score ({score}) requires modification."
+            justification = ["Findings require prompt rewriting."]
+            recommended_action = "Modify prompt before processing."
+        elif score >= settings.DECISION_THRESHOLDS["WARN"]:
+            decision = "WARN"
+            explanation = f"Suspicious activity detected (score: {score})."
             justification = ["Findings require manual review."]
             recommended_action = "Allow but flag for human review."
         else:
             decision = "ALLOW"
-            explanation = "No threats detected."
+            has_semantic = any(f.detector in ("SemanticDetector", "Merged") for f in result.findings)
+            was_routed = result.routing.needs_llm
+            
+            if has_semantic and was_routed:
+                explanation = "No significant security threats were detected. A low-confidence semantic similarity was observed, but it did not exceed the configured threshold. The prompt was classified as Safe after additional analysis."
+            elif has_semantic and not was_routed:
+                explanation = "No significant security threats were detected. Although a weak semantic similarity to known attack patterns was observed, the confidence was below the configured threshold. The final assessment classified the prompt as Safe."
+            else:
+                explanation = "No security threats were detected. The prompt was evaluated and classified as Safe."
+                
             justification = ["Prompt appears safe."]
             recommended_action = "Process prompt normally."
 
-        # Merge new explanations with legacy explanation
-        if result.explainability:
+        # Merge new explanations with legacy explanation for non-ALLOW decisions
+        if decision != "ALLOW" and result.explainability:
             explanation = explanation + "\n\nAudit Trail:\n" + "\n".join(result.explainability)
             
         # Deduplicate attack categories for summary

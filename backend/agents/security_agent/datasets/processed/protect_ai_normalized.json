@@ -1,7 +1,7 @@
 [
   {
     "id": "protect_ai-252f787c",
-    "category": "Extracted Pattern",
+    "category": "Role Manipulation",
     "subcategory": "dummy.json",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -14,7 +14,7 @@
   },
   {
     "id": "protect_ai-e509fcc5",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "website_summarizer.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -27,7 +27,7 @@
   },
   {
     "id": "protect_ai-884b960b",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "website_summarizer.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -40,7 +40,7 @@
   },
   {
     "id": "protect_ai-72f13579",
-    "category": "Extracted Pattern",
+    "category": "Tool Abuse",
     "subcategory": "website_summarizer.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -53,7 +53,7 @@
   },
   {
     "id": "protect_ai-9fc273f2",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "website_summarizer.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -66,7 +66,7 @@
   },
   {
     "id": "protect_ai-7c7e0c9e",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "website_summarizer.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -79,7 +79,7 @@
   },
   {
     "id": "protect_ai-35a352f6",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "website_summarizer.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -92,7 +92,7 @@
   },
   {
     "id": "protect_ai-94d88b48",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "website_summarizer.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -105,7 +105,7 @@
   },
   {
     "id": "protect_ai-e60ba51a",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "personal_assistant.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -118,7 +118,7 @@
   },
   {
     "id": "protect_ai-71c04404",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "personal_assistant.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -131,7 +131,7 @@
   },
   {
     "id": "protect_ai-a63f16bc",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "personal_assistant.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -144,7 +144,7 @@
   },
   {
     "id": "protect_ai-ea359752",
-    "category": "Extracted Pattern",
+    "category": "Tool Abuse",
     "subcategory": "personal_assistant.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -157,7 +157,7 @@
   },
   {
     "id": "protect_ai-8296babf",
-    "category": "Extracted Pattern",
+    "category": "Tool Abuse",
     "subcategory": "personal_assistant.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -170,7 +170,7 @@
   },
   {
     "id": "protect_ai-2db2ae90",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -183,7 +183,7 @@
   },
   {
     "id": "protect_ai-0ebbddb2",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -196,7 +196,7 @@
   },
   {
     "id": "protect_ai-c35256d4",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -209,7 +209,7 @@
   },
   {
     "id": "protect_ai-8d29f531",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",

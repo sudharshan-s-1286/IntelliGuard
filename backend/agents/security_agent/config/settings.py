@@ -57,7 +57,10 @@ REWRITE_TEMPLATES = {
 }
 
 import os
+from dotenv import load_dotenv
 
+# Try to load .env from the backend root directory or parent directories
+load_dotenv()
 # AI Infrastructure Configuration
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-small-en-v1.5")
 CACHE_SIZE = int(os.getenv("CACHE_SIZE", "10000"))
@@ -78,9 +81,10 @@ VECTOR_BATCH_SIZE = int(os.getenv("VECTOR_BATCH_SIZE", "100"))
 
 # Semantic Detector Configuration
 SEMANTIC_RETRIEVAL_ENABLED = os.getenv("SEMANTIC_RETRIEVAL_ENABLED", "True").lower() in ("true", "1", "yes")
-SEMANTIC_SIMILARITY_THRESHOLD = float(os.getenv("SEMANTIC_SIMILARITY_THRESHOLD", "0.85"))
-SEMANTIC_CONFIDENCE_HIGH = float(os.getenv("SEMANTIC_CONFIDENCE_HIGH", "0.95"))
-SEMANTIC_CONFIDENCE_MEDIUM = float(os.getenv("SEMANTIC_CONFIDENCE_MEDIUM", "0.90"))
+SEMANTIC_SIMILARITY_THRESHOLD = float(os.getenv("SEMANTIC_SIMILARITY_THRESHOLD", "0.70"))
+SEMANTIC_CONFIDENCE_CRITICAL = float(os.getenv("SEMANTIC_CONFIDENCE_CRITICAL", "0.90"))
+SEMANTIC_CONFIDENCE_HIGH = float(os.getenv("SEMANTIC_CONFIDENCE_HIGH", "0.82"))
+SEMANTIC_CONFIDENCE_MEDIUM = float(os.getenv("SEMANTIC_CONFIDENCE_MEDIUM", "0.70"))
 SEMANTIC_MAX_RESULTS = int(os.getenv("SEMANTIC_MAX_RESULTS", "5"))
 SEMANTIC_SEARCH_TIMEOUT = float(os.getenv("SEMANTIC_SEARCH_TIMEOUT", "2.0"))
 
@@ -91,14 +95,14 @@ RULE_MATCH_WEIGHT = float(os.getenv("RULE_MATCH_WEIGHT", "1.0"))
 MULTI_ATTACK_FAMILY_WEIGHT = float(os.getenv("MULTI_ATTACK_FAMILY_WEIGHT", "1.2"))
 
 # Decision Engine Configuration
-DECISION_LLM_ROUTING_THRESHOLD = float(os.getenv("DECISION_LLM_ROUTING_THRESHOLD", "0.6"))
+DECISION_LLM_ROUTING_THRESHOLD = float(os.getenv("DECISION_LLM_ROUTING_THRESHOLD", "0.82"))
 DECISION_FUSION_STRATEGY = os.getenv("DECISION_FUSION_STRATEGY", "max")
 DECISION_LLM_ON_CONFLICT = os.getenv("DECISION_LLM_ON_CONFLICT", "True").lower() in ("true", "1", "yes")
 
 # LLM Classifier Configuration
-LLM_PROVIDER = os.getenv("LLM_PROVIDER", "mock") # options: openai, azure, anthropic, mock
-LLM_API_KEY = os.getenv("LLM_API_KEY", "")
-LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME", "gpt-4-turbo")
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "groq") # options: groq, openai, azure, anthropic, mock
+LLM_API_KEY = os.getenv("LLM_API_KEY", os.getenv("GROQ_API_KEY", ""))
+LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME", os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"))
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.0"))
 LLM_MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "500"))
 LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "5.0"))

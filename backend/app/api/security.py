@@ -40,12 +40,19 @@ async def analyze_prompt(request: AnalyzeRequest):
     if not request.prompt or not request.prompt.strip():
         logger.warning("Received an empty prompt for analysis.")
         raise HTTPException(status_code=400, detail="Prompt cannot be empty.")
+        
+    logger.warning(f"API DEBUG (1) Incoming prompt: {request.prompt}")
+    logger.warning(f"API DEBUG (2) Initialized singleton agent being used: {hasattr(agent, 'semantic_detector') and agent.semantic_detector is not None}")
 
     # Call the standardized process() orchestration method
     result = await agent.process(request)
     
+    logger.warning(f"API DEBUG (3) Raw result from agent: {result.result}")
+    
     if result.status == AgentStatus.ERROR:
         # 500 Internal Server Error using the standardized error message
         raise HTTPException(status_code=500, detail=result.message)
+        
+    logger.warning(f"API DEBUG (4) Exact JSON sent to frontend: {result.model_dump_json()}")
         
     return result

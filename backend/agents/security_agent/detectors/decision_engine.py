@@ -138,13 +138,17 @@ class DecisionEngine:
             has_semantic = "SemanticDetector" in detectors
 
             if self.fusion_strategy == "weighted":
-                fused_confidence = sum(f.confidence for f in group) / len(group)
+                # Combine independent confidences: P(A or B) = 1 - (1 - P(A)) * (1 - P(B))
+                complement = 1.0
+                for f in group:
+                    complement *= (1.0 - f.confidence)
+                fused_confidence = 1.0 - complement
             else:
                 fused_confidence = max(f.confidence for f in group)
 
             # Increase confidence if both match
             if has_rule and has_semantic:
-                fused_confidence = min(1.0, fused_confidence + 0.15)
+                fused_confidence = min(1.0, fused_confidence + 0.10)
                 
             max_severity = max(f.severity for f in group)
             

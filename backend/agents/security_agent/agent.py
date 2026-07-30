@@ -178,7 +178,12 @@ class SecurityAgent:
         report.risk_category = risk_assessment["risk_category"]
         report.severity = risk_assessment["severity"]
         report.confidence = risk_assessment["confidence"]
-        report.attack_summary = risk_assessment["attack_summary"]
+        
+        # Presentation logic: For safe prompts, hide intermediate findings from the attack summary
+        if report.decision == "ALLOW" or report.risk_category == "Safe":
+            report.attack_summary = {"Safe": {"confidence": 1.0, "detector": "DecisionEngine", "severity": 0.0}}
+        else:
+            report.attack_summary = risk_assessment["attack_summary"]
 
         duration_ms = (time.time() - start_time) * 1000
 

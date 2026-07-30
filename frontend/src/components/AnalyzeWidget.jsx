@@ -224,6 +224,19 @@ export default function AnalyzeWidget() {
                              {finding.matched_patterns.join(", ")}
                            </div>
                         )}
+                        {finding.metadata && finding.detector === 'SemanticDetector' && (
+                           <div className="mt-2 pt-2 border-t border-[#4B0F18]/50 flex justify-between items-center text-[10px] text-slate-400">
+                             <div className="flex gap-3">
+                               <span><span className="font-semibold text-slate-500">Tier:</span> {finding.metadata.confidence_tier || 'Unknown'}</span>
+                               <span><span className="font-semibold text-slate-500">Sim:</span> {finding.metadata.similarity_score?.toFixed(4) || 'N/A'}</span>
+                             </div>
+                             {finding.metadata.category && (
+                               <span className="bg-[#120809] px-1.5 py-0.5 rounded border border-[#2A0B12] text-slate-300">
+                                 {finding.metadata.category}
+                               </span>
+                             )}
+                           </div>
+                        )}
                       </li>
                     ))}
                   </ul>

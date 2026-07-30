@@ -3,6 +3,7 @@
 Enterprise-grade Risk Assessment Engine. Calculates comprehensive risk score,
 severity, confidence, risk category, and attack summary based on Findings.
 """
+import logging
 from agents.security_agent.config.settings import (
     ATTACK_WEIGHTS,
     PENALTY_ENCODED_PAYLOAD,
@@ -14,9 +15,15 @@ from agents.security_agent.config.settings import (
 )
 from agents.security_agent.models.domain import Finding
 
+logger = logging.getLogger(__name__)
+
 
 def calculate_attack_weight(finding: Finding) -> float:
     """Calculate the weighted contribution of a single attack."""
+    cat_lower = finding.threat.category.lower()
+    if cat_lower in ["safe", "none", "benign", "unknown", "unknown llm failure"]:
+        return 0.0
+
     base_weight = ATTACK_WEIGHTS.get(finding.threat.category, 20)
     
     # Base calculation
@@ -29,13 +36,17 @@ def calculate_attack_weight(finding: Finding) -> float:
         # Semantic only
         if finding.metadata:
             similarity = finding.metadata.get("similarity_score", 1.0)
+            tier = finding.metadata.get("confidence_tier", "Unknown")
             weight *= (similarity * SEMANTIC_SIMILARITY_WEIGHT)
+            logger.info(f"RiskScorer: Semantic finding '{finding.threat.category}' (Tier: {tier}, Sim: {similarity:.4f}) contributes {weight:.2f} to risk score.")
     elif finding.detector == "Merged":
         # Both rule and semantic
         weight *= RULE_MATCH_WEIGHT
         if finding.metadata:
             similarity = finding.metadata.get("similarity_score", 1.0)
+            tier = finding.metadata.get("confidence_tier", "Unknown")
             weight *= (similarity * SEMANTIC_SIMILARITY_WEIGHT)
+            logger.info(f"RiskScorer: Merged finding '{finding.threat.category}' (Tier: {tier}, Sim: {similarity:.4f}) contributes {weight:.2f} to risk score.")
             
     # Apply OWASP mapping weight if available
     if finding.metadata and finding.metadata.get("owasp_mapping") and finding.metadata.get("owasp_mapping") != "Unknown":
@@ -100,10 +111,25 @@ def calculate_risk_score(findings: list[Finding], was_encoded: bool = False, was
         dict: Assessment results including score, severity, category, confidence, and summary.
     """
     raw_score = 0.0
-    detected_count = len(findings)
+    
+    # Filter out safe findings for counting purposes
+    valid_findings = [f for f in findings if f.threat.category.lower() not in ["safe", "none", "benign", "unknown", "unknown llm failure"]]
+    detected_count = len(valid_findings)
+
+    # If LLM classified it as safe, it explicitly clears the prompt
+    llm_safe = any(f.detector == "LLMClassifier" and f.threat.category.lower() in ["safe", "none", "benign"] for f in findings)
+    
+    if llm_safe:
+        return {
+            "risk_score": 0,
+            "severity": calculate_severity(0),
+            "confidence": calculate_confidence(findings),
+            "risk_category": get_risk_category(0),
+            "attack_summary": generate_attack_summary(findings)
+        }
 
     # Calculate base score from individual attacks
-    for finding in findings:
+    for finding in valid_findings:
         raw_score += calculate_attack_weight(finding)
 
     # Apply multipliers and penalties for multiple attack families
@@ -118,6 +144,11 @@ def calculate_risk_score(findings: list[Finding], was_encoded: bool = False, was
 
     # Cap score at 100
     final_score = min(int(raw_score), 100)
+    
+    # Semantic similarity alone must NOT trigger BLOCK (>= 100)
+    is_only_semantic = all(f.detector == "SemanticDetector" for f in valid_findings) and detected_count > 0
+    if is_only_semantic and final_score >= RISK_THRESHOLDS["CRITICAL"]:
+        final_score = RISK_THRESHOLDS["CRITICAL"] - 1
 
     overall_confidence = calculate_confidence(findings)
     severity = calculate_severity(final_score)

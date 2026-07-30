@@ -85,6 +85,34 @@ class KnowledgeRepository:
         except ImportError:
             logger.warning("qdrant-client not installed. Skipping store operation.")
 
+    async def update_attack_metadata(self, metadata_list: list[VectorMetadata]) -> None:
+        """Update only the payload/metadata for existing vectors."""
+        if not metadata_list:
+            return
+
+        try:
+            payload_updates = []
+            for meta in metadata_list:
+                payload = {
+                    "pattern_id": meta.pattern_id,
+                    "category": meta.category,
+                    "attack_type": meta.attack_type,
+                    "severity": meta.severity,
+                    "owasp_mapping": meta.owasp_mapping,
+                    "description": meta.description,
+                    "source": meta.source,
+                    "dataset_version": meta.dataset_version,
+                    "created_at": meta.created_at,
+                    "updated_at": meta.updated_at,
+                    "tags": meta.tags
+                }
+                payload_updates.append((meta.pattern_id, payload))
+
+            await self.db.update_payloads(self.collection_name, payload_updates)
+            logger.info(f"Successfully updated metadata for {len(payload_updates)} patterns.")
+        except Exception as e:
+            logger.error(f"Failed to update metadata: {e}")
+
     async def search_by_embedding(self, vector: list[float], limit: int = 5, category: str | None = None) -> list[PatternMatch]:
         """Search the database by vector similarity, optionally filtering by category."""
         query_filter = None

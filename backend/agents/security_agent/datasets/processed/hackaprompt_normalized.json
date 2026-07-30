@@ -1,7 +1,7 @@
 [
   {
     "id": "hackaprompt-77e2946b",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -14,7 +14,7 @@
   },
   {
     "id": "hackaprompt-7e3859ed",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -27,7 +27,7 @@
   },
   {
     "id": "hackaprompt-730f28d8",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -40,7 +40,7 @@
   },
   {
     "id": "hackaprompt-90b7af85",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -53,7 +53,7 @@
   },
   {
     "id": "hackaprompt-03a9c9fa",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -66,7 +66,7 @@
   },
   {
     "id": "hackaprompt-f0854cef",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -79,7 +79,7 @@
   },
   {
     "id": "hackaprompt-c2b7cfe5",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "README.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -92,7 +92,7 @@
   },
   {
     "id": "hackaprompt-7eb54e4e",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "LICENSE.md",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -105,7 +105,7 @@
   },
   {
     "id": "hackaprompt-9535c377",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -118,7 +118,7 @@
   },
   {
     "id": "hackaprompt-5b5f0a23",
-    "category": "Extracted Pattern",
+    "category": "Context Poisoning",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -131,7 +131,7 @@
   },
   {
     "id": "hackaprompt-5b09a4a7",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -144,7 +144,7 @@
   },
   {
     "id": "hackaprompt-5b197d12",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -157,7 +157,7 @@
   },
   {
     "id": "hackaprompt-783428c7",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -170,7 +170,7 @@
   },
   {
     "id": "hackaprompt-9142ea25",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -183,7 +183,7 @@
   },
   {
     "id": "hackaprompt-574d31a8",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -196,7 +196,7 @@
   },
   {
     "id": "hackaprompt-ba7b5b22",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -209,7 +209,7 @@
   },
   {
     "id": "hackaprompt-2bbc4aa3",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -222,7 +222,7 @@
   },
   {
     "id": "hackaprompt-e6e423fc",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -235,7 +235,7 @@
   },
   {
     "id": "hackaprompt-699b6318",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -248,7 +248,7 @@
   },
   {
     "id": "hackaprompt-7c44c93c",
-    "category": "Extracted Pattern",
+    "category": "Context Poisoning",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -261,7 +261,7 @@
   },
   {
     "id": "hackaprompt-97b61c53",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -274,7 +274,7 @@
   },
   {
     "id": "hackaprompt-da571e57",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -287,7 +287,7 @@
   },
   {
     "id": "hackaprompt-65d34180",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -300,7 +300,7 @@
   },
   {
     "id": "hackaprompt-fffeecb2",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -313,7 +313,7 @@
   },
   {
     "id": "hackaprompt-2ca8410d",
-    "category": "Extracted Pattern",
+    "category": "Role Manipulation",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -326,7 +326,7 @@
   },
   {
     "id": "hackaprompt-bfa02c94",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -339,7 +339,7 @@
   },
   {
     "id": "hackaprompt-6766ce09",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -352,7 +352,7 @@
   },
   {
     "id": "hackaprompt-1048c063",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -365,7 +365,7 @@
   },
   {
     "id": "hackaprompt-19a0b082",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -378,7 +378,7 @@
   },
   {
     "id": "hackaprompt-2fe5f57f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -391,7 +391,7 @@
   },
   {
     "id": "hackaprompt-32966552",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -404,7 +404,7 @@
   },
   {
     "id": "hackaprompt-18125e58",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -417,7 +417,7 @@
   },
   {
     "id": "hackaprompt-5ae7730d",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -430,7 +430,7 @@
   },
   {
     "id": "hackaprompt-ee6fd674",
-    "category": "Extracted Pattern",
+    "category": "Role Manipulation",
     "subcategory": "evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -443,7 +443,7 @@
   },
   {
     "id": "hackaprompt-9ec05224",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "score_submission.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -456,7 +456,7 @@
   },
   {
     "id": "hackaprompt-da74fa4e",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "score_submission.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -469,7 +469,7 @@
   },
   {
     "id": "hackaprompt-57c05693",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "score_submission.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -482,7 +482,7 @@
   },
   {
     "id": "hackaprompt-49e6b501",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "score_submission.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -495,7 +495,7 @@
   },
   {
     "id": "hackaprompt-7dc87290",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "score_submission.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -508,7 +508,7 @@
   },
   {
     "id": "hackaprompt-4683fb21",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "score_submission.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -521,7 +521,7 @@
   },
   {
     "id": "hackaprompt-276efb55",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "score_submission.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -534,7 +534,7 @@
   },
   {
     "id": "hackaprompt-d46037fc",
-    "category": "Extracted Pattern",
+    "category": "Data Exfiltration",
     "subcategory": "utils.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -547,7 +547,7 @@
   },
   {
     "id": "hackaprompt-ca836e31",
-    "category": "Extracted Pattern",
+    "category": "Tool Abuse",
     "subcategory": "utils.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -560,7 +560,7 @@
   },
   {
     "id": "hackaprompt-067b3c0c",
-    "category": "Extracted Pattern",
+    "category": "Tool Abuse",
     "subcategory": "utils.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -573,7 +573,7 @@
   },
   {
     "id": "hackaprompt-9c78095d",
-    "category": "Extracted Pattern",
+    "category": "Tool Abuse",
     "subcategory": "utils.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -586,7 +586,7 @@
   },
   {
     "id": "hackaprompt-6d94a194",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -599,7 +599,7 @@
   },
   {
     "id": "hackaprompt-2bd01879",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -612,7 +612,7 @@
   },
   {
     "id": "hackaprompt-ae6231b0",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -625,7 +625,7 @@
   },
   {
     "id": "hackaprompt-3fd309fc",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -638,7 +638,7 @@
   },
   {
     "id": "hackaprompt-5e2b9f3a",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -651,7 +651,7 @@
   },
   {
     "id": "hackaprompt-eb506d8c",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -664,7 +664,7 @@
   },
   {
     "id": "hackaprompt-639602bb",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -677,7 +677,7 @@
   },
   {
     "id": "hackaprompt-d2454bc5",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -690,7 +690,7 @@
   },
   {
     "id": "hackaprompt-f52195b9",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -703,7 +703,7 @@
   },
   {
     "id": "hackaprompt-471e1f9d",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -716,7 +716,7 @@
   },
   {
     "id": "hackaprompt-627af2db",
-    "category": "Extracted Pattern",
+    "category": "Role Manipulation",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -729,7 +729,7 @@
   },
   {
     "id": "hackaprompt-25bb6554",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -742,7 +742,7 @@
   },
   {
     "id": "hackaprompt-0e63ce03",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -755,7 +755,7 @@
   },
   {
     "id": "hackaprompt-7e801c3a",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -768,7 +768,7 @@
   },
   {
     "id": "hackaprompt-a8e85a5c",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -781,7 +781,7 @@
   },
   {
     "id": "hackaprompt-acb30318",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "completers.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -794,7 +794,7 @@
   },
   {
     "id": "hackaprompt-d3d151a8",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -807,7 +807,7 @@
   },
   {
     "id": "hackaprompt-8a47934f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -820,7 +820,7 @@
   },
   {
     "id": "hackaprompt-2024a57f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -833,7 +833,7 @@
   },
   {
     "id": "hackaprompt-590ba605",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -846,7 +846,7 @@
   },
   {
     "id": "hackaprompt-5a1e1deb",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -859,7 +859,7 @@
   },
   {
     "id": "hackaprompt-ca6aba88",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -872,7 +872,7 @@
   },
   {
     "id": "hackaprompt-82cbf8d7",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -885,7 +885,7 @@
   },
   {
     "id": "hackaprompt-4e2507cf",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -898,7 +898,7 @@
   },
   {
     "id": "hackaprompt-0bcfccda",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -911,7 +911,7 @@
   },
   {
     "id": "hackaprompt-ba94db07",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -924,7 +924,7 @@
   },
   {
     "id": "hackaprompt-5ba9cf38",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -937,7 +937,7 @@
   },
   {
     "id": "hackaprompt-1ece5c24",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -950,7 +950,7 @@
   },
   {
     "id": "hackaprompt-4101cbd2",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -963,7 +963,7 @@
   },
   {
     "id": "hackaprompt-5e70a280",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -976,7 +976,7 @@
   },
   {
     "id": "hackaprompt-2976424b",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -989,7 +989,7 @@
   },
   {
     "id": "hackaprompt-9f468c4b",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1002,7 +1002,7 @@
   },
   {
     "id": "hackaprompt-27c2360d",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1015,7 +1015,7 @@
   },
   {
     "id": "hackaprompt-533b7134",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1028,7 +1028,7 @@
   },
   {
     "id": "hackaprompt-39166c7f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1041,7 +1041,7 @@
   },
   {
     "id": "hackaprompt-0d8a90ef",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1054,7 +1054,7 @@
   },
   {
     "id": "hackaprompt-6751d5d5",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1067,7 +1067,7 @@
   },
   {
     "id": "hackaprompt-1b59563f",
-    "category": "Extracted Pattern",
+    "category": "Jailbreak",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1080,7 +1080,7 @@
   },
   {
     "id": "hackaprompt-a9dd95fd",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1093,7 +1093,7 @@
   },
   {
     "id": "hackaprompt-5e1de5fb",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1106,7 +1106,7 @@
   },
   {
     "id": "hackaprompt-ee21a3cf",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1119,7 +1119,7 @@
   },
   {
     "id": "hackaprompt-b8be1d47",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1132,7 +1132,7 @@
   },
   {
     "id": "hackaprompt-a7b81f19",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1145,7 +1145,7 @@
   },
   {
     "id": "hackaprompt-01a4d68f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1158,7 +1158,7 @@
   },
   {
     "id": "hackaprompt-0ea16511",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1171,7 +1171,7 @@
   },
   {
     "id": "hackaprompt-c78ac2e2",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1184,7 +1184,7 @@
   },
   {
     "id": "hackaprompt-7e1483ef",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1197,7 +1197,7 @@
   },
   {
     "id": "hackaprompt-317fd674",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1210,7 +1210,7 @@
   },
   {
     "id": "hackaprompt-f619d2a7",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1223,7 +1223,7 @@
   },
   {
     "id": "hackaprompt-00595022",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1236,7 +1236,7 @@
   },
   {
     "id": "hackaprompt-40d8e471",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1249,7 +1249,7 @@
   },
   {
     "id": "hackaprompt-8a250f79",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1262,7 +1262,7 @@
   },
   {
     "id": "hackaprompt-7b6e61f9",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1275,7 +1275,7 @@
   },
   {
     "id": "hackaprompt-fbddf54a",
-    "category": "Extracted Pattern",
+    "category": "Data Exfiltration",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1288,7 +1288,7 @@
   },
   {
     "id": "hackaprompt-438f9a31",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1301,7 +1301,7 @@
   },
   {
     "id": "hackaprompt-4cbfa97f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1314,7 +1314,7 @@
   },
   {
     "id": "hackaprompt-8a072295",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1327,7 +1327,7 @@
   },
   {
     "id": "hackaprompt-ad0bcc73",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1340,7 +1340,7 @@
   },
   {
     "id": "hackaprompt-f0b7c489",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1353,7 +1353,7 @@
   },
   {
     "id": "hackaprompt-5eaedaf9",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1366,7 +1366,7 @@
   },
   {
     "id": "hackaprompt-82a73495",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1379,7 +1379,7 @@
   },
   {
     "id": "hackaprompt-0e60b6c7",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1392,7 +1392,7 @@
   },
   {
     "id": "hackaprompt-575aa4e5",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1405,7 +1405,7 @@
   },
   {
     "id": "hackaprompt-1a02c3c7",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1418,7 +1418,7 @@
   },
   {
     "id": "hackaprompt-44a412ce",
-    "category": "Extracted Pattern",
+    "category": "Data Exfiltration",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1431,7 +1431,7 @@
   },
   {
     "id": "hackaprompt-0ad48c75",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1444,7 +1444,7 @@
   },
   {
     "id": "hackaprompt-7be5b8e3",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1457,7 +1457,7 @@
   },
   {
     "id": "hackaprompt-602c6176",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1470,7 +1470,7 @@
   },
   {
     "id": "hackaprompt-9347386d",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1483,7 +1483,7 @@
   },
   {
     "id": "hackaprompt-0ac4408f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1496,7 +1496,7 @@
   },
   {
     "id": "hackaprompt-9a285497",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1509,7 +1509,7 @@
   },
   {
     "id": "hackaprompt-bb8aa785",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1522,7 +1522,7 @@
   },
   {
     "id": "hackaprompt-4fecbccc",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1535,7 +1535,7 @@
   },
   {
     "id": "hackaprompt-e56c7b31",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1548,7 +1548,7 @@
   },
   {
     "id": "hackaprompt-0683275f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1561,7 +1561,7 @@
   },
   {
     "id": "hackaprompt-4fbf6d88",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1574,7 +1574,7 @@
   },
   {
     "id": "hackaprompt-7281d09f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1587,7 +1587,7 @@
   },
   {
     "id": "hackaprompt-f6920022",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1600,7 +1600,7 @@
   },
   {
     "id": "hackaprompt-a48f338a",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1613,7 +1613,7 @@
   },
   {
     "id": "hackaprompt-7b090cf2",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1626,7 +1626,7 @@
   },
   {
     "id": "hackaprompt-b70bc73f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1639,7 +1639,7 @@
   },
   {
     "id": "hackaprompt-d33c4c8b",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1652,7 +1652,7 @@
   },
   {
     "id": "hackaprompt-bf4c34b8",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1665,7 +1665,7 @@
   },
   {
     "id": "hackaprompt-7605494e",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1678,7 +1678,7 @@
   },
   {
     "id": "hackaprompt-719c90e5",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1691,7 +1691,7 @@
   },
   {
     "id": "hackaprompt-7662ecba",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1704,7 +1704,7 @@
   },
   {
     "id": "hackaprompt-d5f3479b",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1717,7 +1717,7 @@
   },
   {
     "id": "hackaprompt-d15f098e",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "gradio_app.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1730,7 +1730,7 @@
   },
   {
     "id": "hackaprompt-037813ec",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "test_token_count.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1743,7 +1743,7 @@
   },
   {
     "id": "hackaprompt-55816cac",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "test_token_count.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1756,7 +1756,7 @@
   },
   {
     "id": "hackaprompt-9ae320bb",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "test_scoring.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1769,7 +1769,7 @@
   },
   {
     "id": "hackaprompt-77a9d93f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "test_scoring.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1782,7 +1782,7 @@
   },
   {
     "id": "hackaprompt-2c40507f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "test_scoring.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1795,7 +1795,7 @@
   },
   {
     "id": "hackaprompt-988b80c0",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "test_scoring.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1808,7 +1808,7 @@
   },
   {
     "id": "hackaprompt-c9ec6e08",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "test_evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1821,7 +1821,7 @@
   },
   {
     "id": "hackaprompt-e5c22e2f",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "test_evaluator.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1834,7 +1834,7 @@
   },
   {
     "id": "hackaprompt-f61632fb",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "rerunner.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1847,7 +1847,7 @@
   },
   {
     "id": "hackaprompt-6ca086d3",
-    "category": "Extracted Pattern",
+    "category": "Role Manipulation",
     "subcategory": "rerunner.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",
@@ -1860,7 +1860,7 @@
   },
   {
     "id": "hackaprompt-284843b9",
-    "category": "Extracted Pattern",
+    "category": "Prompt Injection",
     "subcategory": "rerunner.py",
     "severity": "MEDIUM",
     "owasp": "LLM01",

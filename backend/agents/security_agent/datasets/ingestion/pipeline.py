@@ -1,10 +1,10 @@
 import datetime
-import hashlib
 import json
 import logging
 import time
 from pathlib import Path
 
+from tqdm import tqdm
 from agents.security_agent.ai.embeddings import EmbeddingService
 from agents.security_agent.datasets.ingestion.cleaner import DatasetCleaner
 from agents.security_agent.models.domain import NormalizedDatasetRecord, VectorMetadata
@@ -22,13 +22,17 @@ class DatasetIngestionPipeline:
         self.stats = {
             "datasets_processed": 0,
             "total_records": 0,
+            "new_records": 0,
+            "existing_records": 0,
             "embeddings_generated": 0,
+            "metadata_updates": 0,
+            "vector_inserts": 0,
             "duplicates_skipped": 0,
-            "vectors_inserted": 0,
-            "vectors_updated": 0,
-            "failures": 0,
             "invalid_skipped": 0,
-            "total_ingestion_time": 0.0
+            "failures": 0,
+            "total_ingestion_time": 0.0,
+            "cache_hits": 0,
+            "cache_misses": 0
         }
 
     def _generate_deterministic_id(self, source: str, text: str) -> str:
@@ -102,8 +106,6 @@ class DatasetIngestionPipeline:
         clean_result = self.cleaner.clean_batch(normalized_records)
         valid_records: list[NormalizedDatasetRecord] = clean_result["cleaned_records"]
         
-        # Update stats
-        # We treat cleaner's duplicates as duplicate skipping
         self.stats["duplicates_skipped"] += clean_result["stats"]["duplicates_removed"]
         self.stats["invalid_skipped"] += clean_result["stats"]["invalid_skipped"]
         
@@ -115,34 +117,47 @@ class DatasetIngestionPipeline:
         existing_ids = await self.repository.check_existing_ids(ids_to_check)
         
         new_records = []
-        updated_records = []
+        existing_records = []
         for r in valid_records:
             if r.id in existing_ids:
-                updated_records.append(r)
+                existing_records.append(r)
             else:
                 new_records.append(r)
                 
-        texts = [r.text for r in valid_records]
-        try:
-            # Batch embedding generation
-            embeddings = await self.embedding_service.generate_embedding(texts)
-            if not isinstance(embeddings, list) or len(embeddings) == 0:
-                if not isinstance(embeddings[0], list):
+        self.stats["new_records"] += len(new_records)
+        self.stats["existing_records"] += len(existing_records)
+        
+        # 1. Update Existing Records (Metadata only)
+        if existing_records:
+            metadata_list = [self._map_to_vector_metadata(r) for r in existing_records]
+            try:
+                await self.repository.update_attack_metadata(metadata_list)
+                self.stats["metadata_updates"] += len(existing_records)
+            except Exception as e:
+                logger.error(f"Failed to update metadata for {file_path}: {e}")
+                self.stats["failures"] += len(existing_records)
+
+        # 2. Insert New Records (Embeddings + Vector insert)
+        if new_records:
+            texts = [r.text for r in new_records]
+            try:
+                # We can trace cache hits inside generate_embedding indirectly, but for now we track generated.
+                embeddings = await self.embedding_service.generate_embedding(texts)
+                if not isinstance(embeddings, list):
                     embeddings = [embeddings]
-            
-            self.stats["embeddings_generated"] += len(valid_records)
-            
-            metadata_list = [self._map_to_vector_metadata(r) for r in valid_records]
-            
-            # Batch upload vectors (Qdrant's upsert will insert new and update existing automatically)
-            await self.repository.store_attack_patterns(vectors=embeddings, metadata_list=metadata_list)
-            
-            self.stats["vectors_inserted"] += len(new_records)
-            self.stats["vectors_updated"] += len(updated_records)
-            
-        except Exception as e:
-            logger.error(f"Failed to embed/store records for {file_path}: {e}")
-            self.stats["failures"] += len(valid_records)
+                if len(embeddings) > 0 and not isinstance(embeddings[0], list):
+                    embeddings = [embeddings]
+                
+                self.stats["embeddings_generated"] += len(new_records)
+                
+                metadata_list = [self._map_to_vector_metadata(r) for r in new_records]
+                
+                await self.repository.store_attack_patterns(vectors=embeddings, metadata_list=metadata_list)
+                self.stats["vector_inserts"] += len(new_records)
+                
+            except Exception as e:
+                logger.error(f"Failed to embed/store new records for {file_path}: {e}")
+                self.stats["failures"] += len(new_records)
 
     async def run(self) -> dict:
         """Run the full ingestion pipeline."""
@@ -157,11 +172,42 @@ class DatasetIngestionPipeline:
         await self.repository.initialize()
         
         # We look for json files in processed directory
-        for json_file in self.data_path.glob("*.json"):
+        files = list(self.data_path.glob("*.json"))
+        
+        # Add tqdm for dataset progress
+        for json_file in tqdm(files, desc="Processing Datasets"):
             dataset_name = json_file.stem.replace("_normalized", "")
             logger.info(f"Processing {json_file}")
             await self._process_file(dataset_name, json_file)
             self.stats["datasets_processed"] += 1
             
-        self.stats["total_ingestion_time"] = round(time.time() - start_time, 2)
+        end_time = time.time()
+        self.stats["total_ingestion_time"] = round(end_time - start_time, 2)
+        
+        # Check cache metrics if available
+        cache_health = self.embedding_service.cache_service.health()
+        keys_count = cache_health.get("keys_count", 0)
+        
+        # Compute throughput
+        throughput = 0.0
+        if self.stats["total_ingestion_time"] > 0:
+            throughput = self.stats["total_records"] / self.stats["total_ingestion_time"]
+            
+        print("\n" + "="*50)
+        print("INGESTION SUMMARY")
+        print("="*50)
+        print(f"Datasets Processed   : {self.stats['datasets_processed']}")
+        print(f"Total Records        : {self.stats['total_records']}")
+        print(f"New Records          : {self.stats['new_records']}")
+        print(f"Existing Records     : {self.stats['existing_records']}")
+        print(f"Embeddings Generated : {self.stats['embeddings_generated']}")
+        print(f"Cache Size           : {keys_count}")
+        print(f"Metadata Updates     : {self.stats['metadata_updates']}")
+        print(f"Vector Inserts       : {self.stats['vector_inserts']}")
+        print(f"Duplicates Skipped   : {self.stats['duplicates_skipped']}")
+        print(f"Failures             : {self.stats['failures']}")
+        print(f"Elapsed Time         : {self.stats['total_ingestion_time']:.2f}s")
+        print(f"Overall Throughput   : {throughput:.2f} records/sec")
+        print("="*50 + "\n")
+        
         return self.stats
