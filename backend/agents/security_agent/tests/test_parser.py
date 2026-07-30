@@ -1,6 +1,6 @@
 import pytest
 
-from backend.agents.security_agent.validators.request_validator import parse_prompt
+from agents.security_agent.validators.request_validator import parse_prompt
 
 
 @pytest.mark.asyncio

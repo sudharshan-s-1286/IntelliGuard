@@ -3,7 +3,7 @@ import time
 from collections import OrderedDict
 from typing import Any
 
-from backend.agents.security_agent.config.settings import CACHE_SIZE
+from agents.security_agent.config.settings import CACHE_SIZE
 
 
 class CacheService:

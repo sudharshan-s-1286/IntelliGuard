@@ -1,10 +1,10 @@
 
 import pytest
 
-from backend.agents.security_agent.ai.embeddings import EmbeddingService
-from backend.agents.security_agent.config import settings
-from backend.agents.security_agent.services.cache_service import CacheService
-from backend.agents.security_agent.services.model_loader import ModelLoader
+from agents.security_agent.ai.embeddings import EmbeddingService
+from agents.security_agent.config import settings
+from agents.security_agent.services.cache_service import CacheService
+from agents.security_agent.services.model_loader import ModelLoader
 
 
 @pytest.fixture

@@ -3,10 +3,10 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from backend.agents.security_agent.config import settings
-from backend.agents.security_agent.llm.classifier import LLMClassifier
-from backend.agents.security_agent.llm.providers import MockProvider
-from backend.agents.security_agent.models.domain import Finding, Threat
+from agents.security_agent.config import settings
+from agents.security_agent.llm.classifier import LLMClassifier
+from agents.security_agent.llm.providers import MockProvider
+from agents.security_agent.models.domain import Finding, Threat
 
 
 @pytest.fixture
@@ -44,7 +44,7 @@ async def test_llm_classifier_mock_provider(prior_findings):
     assert result.routing.needs_llm is True # Because LLM was run
 
 @pytest.mark.asyncio
-@patch('backend.agents.security_agent.llm.providers.get_provider')
+@patch('agents.security_agent.llm.providers.get_provider')
 async def test_llm_classifier_json_parsing_success(mock_get_provider, prior_findings):
     mock_provider = MockProvider()
     
@@ -72,7 +72,7 @@ async def test_llm_classifier_json_parsing_success(mock_get_provider, prior_find
     assert result.findings[0].confidence == 0.99
 
 @pytest.mark.asyncio
-@patch('backend.agents.security_agent.llm.providers.get_provider')
+@patch('agents.security_agent.llm.providers.get_provider')
 async def test_llm_classifier_retry_and_fallback(mock_get_provider, prior_findings):
     mock_provider = MockProvider()
     
@@ -100,7 +100,7 @@ async def test_llm_classifier_retry_and_fallback(mock_get_provider, prior_findin
     assert "LLM classification failed" in finding.threat.description
 
 @pytest.mark.asyncio
-@patch('backend.agents.security_agent.llm.providers.get_provider')
+@patch('agents.security_agent.llm.providers.get_provider')
 async def test_llm_classifier_timeout(mock_get_provider, prior_findings):
     mock_provider = MockProvider()
     

@@ -17,6 +17,7 @@ class Finding:
     evidence: str
     detector: str = "Unknown"
     confidence: float = 0.0
+    metadata: dict[str, Any] = None
 
 @dataclass
 class RiskScore:

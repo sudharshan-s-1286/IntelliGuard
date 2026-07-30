@@ -1,12 +1,13 @@
 """Semantic Detector."""
 import asyncio
 import logging
+import time
 from typing import Any
 
-from backend.agents.security_agent.ai.embeddings import EmbeddingService
-from backend.agents.security_agent.config import settings
-from backend.agents.security_agent.models.domain import Finding, Threat
-from backend.agents.security_agent.repositories.knowledge_repository import (
+from agents.security_agent.ai.embeddings import EmbeddingService
+from agents.security_agent.config import settings
+from agents.security_agent.models.domain import Finding, Threat
+from agents.security_agent.repositories.knowledge_repository import (
     KnowledgeRepository,
 )
 
@@ -36,23 +37,34 @@ class SemanticDetector:
         :param prompt: The input prompt.
         :return: A list of Findings.
         """
+        if not settings.SEMANTIC_RETRIEVAL_ENABLED:
+            logger.info("Semantic retrieval is disabled via configuration.")
+            return []
+
         findings = []
         
         try:
             # 1. Generate embedding
             logger.info("Generating embedding for semantic detection.")
-            # Use asyncio.wait_for to apply a timeout to the overall process
+            emb_start = time.time()
             vector = await asyncio.wait_for(
                 self.embedding_service.generate_embedding(prompt),
                 timeout=self.timeout
             )
+            emb_time_ms = (time.time() - emb_start) * 1000
+            logger.info(f"Embedding generation completed in {emb_time_ms:.2f}ms")
 
             # 2. Search Qdrant via Repository
             logger.info("Searching vector DB for semantic matches.")
+            qdrant_start = time.time()
             matches = await asyncio.wait_for(
                 self.repository.search_by_embedding(vector, limit=self.limit),
                 timeout=self.timeout
             )
+            qdrant_time_ms = (time.time() - qdrant_start) * 1000
+            scores = [match.similarity_score for match in matches]
+            logger.warning(f"DEBUG(3): retrieved similarity scores from Qdrant: {scores}")
+            logger.info(f"Qdrant query completed in {qdrant_time_ms:.2f}ms. Retrieved {len(matches)} results.")
 
             # 3. Similarity Evaluation & False Positive Reduction
             seen_categories = set()
@@ -73,22 +85,31 @@ class SemanticDetector:
 
                 confidence = self._determine_confidence(score)
                 severity = meta.get("severity", "MEDIUM")
-                # Map string severity to float for the Finding schema
-                # e.g., CRITICAL: 1.0, HIGH: 0.8, MEDIUM: 0.5, LOW: 0.2
                 severity_map = {"CRITICAL": 1.0, "HIGH": 0.8, "MEDIUM": 0.5, "LOW": 0.2}
                 mapped_severity = severity_map.get(str(severity).upper(), 0.5)
 
-                description = meta.get("description", "Semantic similarity to known attack.")
+                finding_metadata = {
+                    "similarity_score": score,
+                    "attack_type": meta.get("attack_type", "Unknown"),
+                    "category": category,
+                    "owasp_mapping": meta.get("owasp_mapping", "Unknown"),
+                    "severity": severity,
+                    "source_dataset": meta.get("source", "Unknown"),
+                    "original_attack_prompt": meta.get("description", ""),
+                    "embedding_time_ms": emb_time_ms,
+                    "qdrant_time_ms": qdrant_time_ms
+                }
                 
                 finding = Finding(
                     threat=Threat(
                         category=category,
-                        description=f"{description} (Similarity: {score:.2f}, Confidence: {confidence})"
+                        description="Potential novel attack detected through semantic similarity."
                     ),
                     severity=mapped_severity,
                     evidence=f"Matched Pattern ID: {match.pattern_id}",
                     detector="SemanticDetector",
-                    confidence=score
+                    confidence=score,
+                    metadata=finding_metadata
                 )
                 findings.append(finding)
 
@@ -104,7 +125,7 @@ class SemanticDetector:
     def health(self) -> dict[str, Any]:
         """Health check for the semantic detector."""
         return {
-            "status": "healthy",
+            "status": "healthy" if settings.SEMANTIC_RETRIEVAL_ENABLED else "disabled",
             "threshold": self.threshold,
             "embedding_service": self.embedding_service.health(),
             "repository": self.repository.health()

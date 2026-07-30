@@ -2,9 +2,9 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from backend.agents.security_agent.detectors.decision_engine import DecisionEngine
-from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
-from backend.agents.security_agent.models.domain import Finding, Threat
+from agents.security_agent.detectors.decision_engine import DecisionEngine
+from agents.security_agent.detectors.semantic_detector import SemanticDetector
+from agents.security_agent.models.domain import Finding, Threat
 
 
 @pytest.fixture
@@ -23,7 +23,7 @@ def decision_engine(semantic_detector):
     return engine
 
 @pytest.mark.asyncio
-@patch('backend.agents.security_agent.detectors.decision_engine.run_all_detectors')
+@patch('agents.security_agent.detectors.decision_engine.run_all_detectors')
 async def test_decision_engine_no_findings(mock_run_all, decision_engine):
     # Rule engine finds nothing
     mock_run_all.return_value = {
@@ -36,7 +36,7 @@ async def test_decision_engine_no_findings(mock_run_all, decision_engine):
     assert len(result.findings) == 0
 
 @pytest.mark.asyncio
-@patch('backend.agents.security_agent.detectors.decision_engine.run_all_detectors')
+@patch('agents.security_agent.detectors.decision_engine.run_all_detectors')
 async def test_decision_engine_routing_low_confidence(mock_run_all, decision_engine, semantic_detector):
     # Rule engine returns a low confidence finding
     mock_run_all.return_value = {
@@ -57,7 +57,7 @@ async def test_decision_engine_routing_low_confidence(mock_run_all, decision_eng
     assert "below routing threshold" in result.routing.reason
 
 @pytest.mark.asyncio
-@patch('backend.agents.security_agent.detectors.decision_engine.run_all_detectors')
+@patch('agents.security_agent.detectors.decision_engine.run_all_detectors')
 async def test_decision_engine_duplicate_resolution(mock_run_all, decision_engine, semantic_detector):
     # Rule Engine finds Prompt Injection
     mock_run_all.return_value = {
@@ -96,7 +96,7 @@ async def test_decision_engine_duplicate_resolution(mock_run_all, decision_engin
     assert "Pattern ID: 123" in f.evidence
 
 @pytest.mark.asyncio
-@patch('backend.agents.security_agent.detectors.decision_engine.run_all_detectors')
+@patch('agents.security_agent.detectors.decision_engine.run_all_detectors')
 async def test_decision_engine_conflict_routing(mock_run_all, decision_engine, semantic_detector):
     # Rule Engine finds nothing
     mock_run_all.return_value = {

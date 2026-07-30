@@ -1,13 +1,13 @@
 import pytest
 
-from backend.agents.security_agent.datasets.ingestion.cleaner import DatasetCleaner
-from backend.agents.security_agent.datasets.ingestion.normalizers import (
+from agents.security_agent.datasets.ingestion.cleaner import DatasetCleaner
+from agents.security_agent.datasets.ingestion.normalizers import (
     GarakNormalizer,
     HackAPromptNormalizer,
     OWASPNormalizer,
     ProtectAINormalizer,
 )
-from backend.agents.security_agent.models.domain import NormalizedDatasetRecord
+from agents.security_agent.models.domain import NormalizedDatasetRecord
 
 
 def test_hackaprompt_normalizer():

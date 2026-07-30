@@ -3,10 +3,10 @@ import logging
 import os
 from typing import Any
 
-from backend.agents.security_agent.repositories.knowledge_repository import (
+from agents.security_agent.repositories.knowledge_repository import (
     KnowledgeRepository,
 )
-from backend.agents.security_agent.services.knowledge_ingestion_service import (
+from agents.security_agent.services.knowledge_ingestion_service import (
     KnowledgeIngestionService,
 )
 

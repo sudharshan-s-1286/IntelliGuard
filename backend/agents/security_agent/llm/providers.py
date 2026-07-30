@@ -3,7 +3,7 @@ import json
 import logging
 from abc import ABC, abstractmethod
 
-from backend.agents.security_agent.config import settings
+from agents.security_agent.config import settings
 
 logger = logging.getLogger(__name__)
 

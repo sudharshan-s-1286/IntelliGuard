@@ -1,7 +1,7 @@
 import hashlib
 import re
 
-from backend.agents.security_agent.models.domain import NormalizedDatasetRecord
+from agents.security_agent.models.domain import NormalizedDatasetRecord
 
 class DatasetCleaner:
     def __init__(self):

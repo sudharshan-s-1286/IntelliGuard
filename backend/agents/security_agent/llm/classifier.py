@@ -3,10 +3,10 @@ import asyncio
 import json
 import logging
 
-from backend.agents.security_agent.config import settings
-from backend.agents.security_agent.llm.providers import get_provider
-from backend.agents.security_agent.llm.templates import build_classification_prompt
-from backend.agents.security_agent.models.domain import (
+from agents.security_agent.config import settings
+from agents.security_agent.llm.providers import get_provider
+from agents.security_agent.llm.templates import build_classification_prompt
+from agents.security_agent.models.domain import (
     DetectionResult,
     Finding,
     LLMClassificationResponse,

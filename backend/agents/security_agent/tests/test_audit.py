@@ -1,10 +1,10 @@
 
 import pytest
 
-from backend.agents.security_agent.audit.analytics import AuditAnalytics
-from backend.agents.security_agent.audit.models import AuditEvent
-from backend.agents.security_agent.audit.storage import AuditStorage
-from backend.agents.security_agent.audit.utils import truncate_string
+from agents.security_agent.audit.analytics import AuditAnalytics
+from agents.security_agent.audit.models import AuditEvent
+from agents.security_agent.audit.storage import AuditStorage
+from agents.security_agent.audit.utils import truncate_string
 
 
 @pytest.mark.asyncio

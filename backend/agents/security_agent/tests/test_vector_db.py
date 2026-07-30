@@ -3,14 +3,14 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from backend.agents.security_agent.ai.embeddings import EmbeddingService
-from backend.agents.security_agent.knowledge.manager import KnowledgeManager
-from backend.agents.security_agent.models.domain import VectorMetadata
-from backend.agents.security_agent.repositories.knowledge_repository import (
+from agents.security_agent.ai.embeddings import EmbeddingService
+from agents.security_agent.knowledge.manager import KnowledgeManager
+from agents.security_agent.models.domain import VectorMetadata
+from agents.security_agent.repositories.knowledge_repository import (
     KnowledgeRepository,
 )
-from backend.agents.security_agent.repositories.qdrant_service import QdrantService
-from backend.agents.security_agent.services.knowledge_ingestion_service import (
+from agents.security_agent.repositories.qdrant_service import QdrantService
+from agents.security_agent.services.knowledge_ingestion_service import (
     KnowledgeIngestionService,
 )
 

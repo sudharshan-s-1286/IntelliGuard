@@ -1,6 +1,6 @@
 import pytest
 
-from backend.agents.security_agent.services.remediation_service import remediate
+from agents.security_agent.services.remediation_service import remediate
 
 
 @pytest.mark.asyncio

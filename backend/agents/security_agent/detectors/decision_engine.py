@@ -3,16 +3,17 @@ import asyncio
 import logging
 from typing import Any
 
-from backend.agents.security_agent.config import settings
-from backend.agents.security_agent.detectors.rule_engine import run_all_detectors
-from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
-from backend.agents.security_agent.models.domain import (
+from agents.security_agent.config import settings
+from agents.security_agent.detectors.rule_engine import run_all_detectors
+from agents.security_agent.detectors.semantic_detector import SemanticDetector
+from agents.security_agent.models.domain import (
     DetectionResult,
     Finding,
     Metadata,
     RiskScore,
     RoutingDecision,
     Threat,
+    Recommendation
 )
 
 logger = logging.getLogger(__name__)
@@ -36,7 +37,6 @@ class DecisionEngine:
         logger.info("Decision Engine: Starting orchestration.")
 
         # 1. Execute detectors concurrently
-        # Wrap the synchronous rule engine in an async wrapper
         async def _run_rule_engine() -> list[Finding]:
             results_dict = run_all_detectors(prompt)
             return self._normalize_rule_output(results_dict)
@@ -46,6 +46,9 @@ class DecisionEngine:
             self.semantic_detector.evaluate(prompt)
         )
         
+        logger.warning(f"DEBUG(1): rule engine findings count: {len(rule_findings)}")
+        logger.warning(f"DEBUG(2): semantic retrieval results count: {len(semantic_findings)}")
+
         all_findings = rule_findings + semantic_findings
 
         if not all_findings:
@@ -60,13 +63,13 @@ class DecisionEngine:
             )
 
         # 2. Result Aggregation & Duplicate Resolution
-        merged_findings = self._resolve_duplicates(all_findings, explainability)
+        recommendations = []
+        merged_findings = self._resolve_duplicates(all_findings, explainability, recommendations)
 
         # 3. LLM Routing & Conflict Resolution
         needs_llm, reason = self._determine_routing(rule_findings, semantic_findings, merged_findings, explainability)
 
         # 4. Final Aggregation
-        # Risk score calculation is deferred per requirements.
         max_severity = max([f.severity for f in merged_findings], default=0.0)
         max_confidence = max([f.confidence for f in merged_findings], default=0.0)
         
@@ -80,7 +83,7 @@ class DecisionEngine:
         return DetectionResult(
             risk_score=risk_placeholder,
             findings=merged_findings,
-            recommendations=[],
+            recommendations=recommendations,
             metadata=Metadata(execution_time_ms=0.0, model_versions={}),
             routing=RoutingDecision(needs_llm=needs_llm, reason=reason),
             explainability=explainability
@@ -101,16 +104,17 @@ class DecisionEngine:
                 findings.append(Finding(
                     threat=Threat(
                         category=category,
-                        description=res.get("reason", "")
+                        description="Known rule-based attack."
                     ),
                     severity=mapped_severity,
                     evidence=", ".join(res.get("matched_patterns", [])),
                     detector="RuleEngine",
-                    confidence=confidence
+                    confidence=confidence,
+                    metadata=None
                 ))
         return findings
 
-    def _resolve_duplicates(self, findings: list[Finding], explainability: list[str]) -> list[Finding]:
+    def _resolve_duplicates(self, findings: list[Finding], explainability: list[str], recommendations: list[Recommendation]) -> list[Finding]:
         """Merge findings with the same category across detectors."""
         grouped: dict[str, list[Finding]] = {}
         for f in findings:
@@ -119,33 +123,58 @@ class DecisionEngine:
         merged = []
         for category, group in grouped.items():
             if len(group) == 1:
-                merged.append(group[0])
-                explainability.append(f"[{category}] Detected exclusively by {group[0].detector} (Confidence: {group[0].confidence:.2f}).")
+                f = group[0]
+                merged.append(f)
+                explainability.append(f"[{category}] Detected exclusively by {f.detector} (Confidence: {f.confidence:.2f}).")
+                if f.detector == "SemanticDetector" and f.metadata:
+                    recommendations.append(Recommendation(
+                        action=f"Review semantic match from {f.metadata.get('source_dataset')}",
+                        priority="High" if f.severity >= 0.8 else "Medium"
+                    ))
                 continue
 
-            # Confidence Fusion Strategy
+            detectors = [f.detector for f in group]
+            has_rule = "RuleEngine" in detectors
+            has_semantic = "SemanticDetector" in detectors
+
             if self.fusion_strategy == "weighted":
-                # Example weighting: average
                 fused_confidence = sum(f.confidence for f in group) / len(group)
-            else: # "max"
+            else:
                 fused_confidence = max(f.confidence for f in group)
 
+            # Increase confidence if both match
+            if has_rule and has_semantic:
+                fused_confidence = min(1.0, fused_confidence + 0.15)
+                
             max_severity = max(f.severity for f in group)
             
-            # Merge evidence and descriptions
             combined_evidence = " | ".join([f"[{f.detector}] {f.evidence}" for f in group if f.evidence])
-            combined_desc = " | ".join([f.threat.description for f in group])
+            
+            # Use metadata from semantic detector if present
+            semantic_finding = next((f for f in group if f.detector == "SemanticDetector"), None)
+            meta = semantic_finding.metadata if semantic_finding else None
+            
+            if has_rule and has_semantic:
+                combined_desc = "Known rule-based attack corroborated by semantic similarity."
+                if meta:
+                    recommendations.append(Recommendation(
+                        action=f"Review semantic match from {meta.get('source_dataset')} for corroborated rule-based attack",
+                        priority="High"
+                    ))
+            else:
+                combined_desc = " | ".join([f.threat.description for f in group])
 
             merged.append(Finding(
                 threat=Threat(category=category, description=combined_desc),
                 severity=max_severity,
                 evidence=combined_evidence,
                 detector="Merged",
-                confidence=fused_confidence
+                confidence=fused_confidence,
+                metadata=meta
             ))
             
             explainability.append(
-                f"[{category}] Duplicate resolved. Merged findings from {[f.detector for f in group]}. "
+                f"[{category}] Duplicate resolved. Merged findings from {detectors}. "
                 f"Fused Confidence: {fused_confidence:.2f}, Severity: {max_severity}."
             )
             

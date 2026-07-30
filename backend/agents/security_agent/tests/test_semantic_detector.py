@@ -3,10 +3,10 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from backend.agents.security_agent.ai.embeddings import EmbeddingService
-from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
-from backend.agents.security_agent.models.domain import PatternMatch
-from backend.agents.security_agent.repositories.knowledge_repository import (
+from agents.security_agent.ai.embeddings import EmbeddingService
+from agents.security_agent.detectors.semantic_detector import SemanticDetector
+from agents.security_agent.models.domain import PatternMatch
+from agents.security_agent.repositories.knowledge_repository import (
     KnowledgeRepository,
 )
 

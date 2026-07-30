@@ -5,7 +5,7 @@ the user's legitimate intent using deterministic rewrite templates.
 """
 import re
 
-from backend.agents.security_agent.config.settings import REWRITE_TEMPLATES
+from agents.security_agent.config.settings import REWRITE_TEMPLATES
 
 
 def remove_attack_patterns(prompt: str, findings: dict) -> str:

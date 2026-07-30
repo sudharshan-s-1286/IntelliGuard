@@ -2,7 +2,7 @@ import uuid
 from abc import ABC, abstractmethod
 from typing import Any
 
-from backend.agents.security_agent.models.domain import NormalizedDatasetRecord
+from agents.security_agent.models.domain import NormalizedDatasetRecord
 
 class BaseNormalizer(ABC):
     @abstractmethod

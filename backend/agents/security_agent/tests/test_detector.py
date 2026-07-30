@@ -1,6 +1,6 @@
 import pytest
 
-from backend.agents.security_agent.detectors.rule_engine import run_all_detectors
+from agents.security_agent.detectors.rule_engine import run_all_detectors
 
 
 @pytest.mark.asyncio

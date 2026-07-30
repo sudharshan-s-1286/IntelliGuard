@@ -3,7 +3,7 @@ import hashlib
 import logging
 from typing import Any
 
-from backend.agents.security_agent.config.settings import BATCH_SIZE, EMBEDDING_MODEL
+from agents.security_agent.config.settings import BATCH_SIZE, EMBEDDING_MODEL
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +59,11 @@ class EmbeddingService:
                     # model.encode may be synchronous, but we can call it here.
                     # In a high-throughput env, this should run in a threadpool
                     # but for this infrastructure phase, we wrap it directly.
-                    batch_embs = model.encode(batch, convert_to_numpy=False)
+                    batch_embs = model.encode(batch)
+                    if hasattr(batch_embs, 'tolist'):
+                        batch_embs = batch_embs.tolist()
+                    elif isinstance(batch_embs, list) and hasattr(batch_embs[0], 'tolist'):
+                        batch_embs = [emb.tolist() for emb in batch_embs]
                     computed_embeddings.extend(batch_embs)
                 except Exception as e:
                     logger.error(f"Error generating embeddings: {e}")

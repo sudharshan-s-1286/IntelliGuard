@@ -3,7 +3,7 @@ import asyncio
 import logging
 from typing import Any
 
-from backend.agents.security_agent.config.settings import (
+from agents.security_agent.config.settings import (
     DEVICE_SELECTION,
     FALLBACK_TO_CPU,
 )

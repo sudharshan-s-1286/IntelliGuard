@@ -4,9 +4,9 @@ import logging
 from datetime import datetime, UTC
 from typing import Any
 
-from backend.agents.security_agent.ai.embeddings import EmbeddingService
-from backend.agents.security_agent.models.domain import VectorMetadata
-from backend.agents.security_agent.repositories.knowledge_repository import (
+from agents.security_agent.ai.embeddings import EmbeddingService
+from agents.security_agent.models.domain import VectorMetadata
+from agents.security_agent.repositories.knowledge_repository import (
     KnowledgeRepository,
 )
 

@@ -1,7 +1,7 @@
 """Security Report Generator."""
 
-from backend.agents.security_agent.models.communication import SecurityAgentResponse
-from backend.agents.security_agent.models.domain import DetectionResult
+from agents.security_agent.models.communication import SecurityAgentResponse
+from agents.security_agent.models.domain import DetectionResult
 
 
 class ReportGenerator:
@@ -18,30 +18,44 @@ class ReportGenerator:
         # Format findings for the legacy schema
         formatted_findings = []
         for f in result.findings:
-            formatted_findings.append({
+            base_finding = {
                 "detector": f.detector,
                 "confidence": f.confidence,
                 "severity": f.severity,
                 "reason": f.threat.description,
                 "attack": f.threat.category,
                 "matched_patterns": [f.evidence] if f.evidence else []
-            })
+            }
+            
+            # Incorporate semantic metadata if available
+            if f.metadata:
+                original_prompt_meta = str(f.metadata.get("original_attack_prompt", ""))
+                base_finding.update({
+                    "similarity_score": f.metadata.get("similarity_score", 0.0),
+                    "attack_type": f.metadata.get("attack_type", "Unknown"),
+                    "category": f.metadata.get("category", "Unknown"),
+                    "owasp": f.metadata.get("owasp_mapping", "Unknown"),
+                    "source_dataset": f.metadata.get("source_dataset", "Unknown"),
+                    "attack_preview": original_prompt_meta[:200]
+                })
+                
+            formatted_findings.append(base_finding)
             
         # Decision Logic
         if result.risk_score.score >= 50:
             decision = "BLOCK"
             explanation = f"High risk score ({result.risk_score.score}) warrants blocking."
-            justification = f"Detected {len(result.findings)} severe threats."
+            justification = [f"Detected {len(result.findings)} severe threats."]
             recommended_action = "Reject input and flag user."
         elif result.risk_score.score > 0:
             decision = "FLAG"
             explanation = f"Suspicious activity detected (score: {result.risk_score.score})."
-            justification = "Findings require manual review."
+            justification = ["Findings require manual review."]
             recommended_action = "Allow but flag for human review."
         else:
             decision = "ALLOW"
             explanation = "No threats detected."
-            justification = "Prompt appears safe."
+            justification = ["Prompt appears safe."]
             recommended_action = "Process prompt normally."
 
         # Merge new explanations with legacy explanation
@@ -50,6 +64,11 @@ class ReportGenerator:
             
         # Deduplicate attack categories for summary
         attack_categories = list(set([f.threat.category for f in result.findings]))
+        
+        # Pull semantic recommendations
+        for rec in result.recommendations:
+            if not any(rec.action in j for j in justification):
+                justification.append(f"[{rec.priority}] {rec.action}")
         
         # Build the final response
         return SecurityAgentResponse(
@@ -62,7 +81,7 @@ class ReportGenerator:
             findings=formatted_findings,
             attack_summary={cat: {} for cat in attack_categories}, # Mocking old structure
             explanation=explanation,
-            justification=[justification],
+            justification=justification,
             recommended_action=recommended_action,
             safe_prompt=original_prompt, # Remediation handles this later if hooked in
             remediation={

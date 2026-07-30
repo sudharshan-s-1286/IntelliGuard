@@ -3,26 +3,49 @@
 Enterprise-grade Risk Assessment Engine. Calculates comprehensive risk score,
 severity, confidence, risk category, and attack summary based on Findings.
 """
-from backend.agents.security_agent.config.settings import (
+from agents.security_agent.config.settings import (
     ATTACK_WEIGHTS,
     PENALTY_ENCODED_PAYLOAD,
-    PENALTY_MULTI_ATTACK_MULTIPLIER,
+    MULTI_ATTACK_FAMILY_WEIGHT,
+    OWASP_MATCH_WEIGHT,
+    SEMANTIC_SIMILARITY_WEIGHT,
+    RULE_MATCH_WEIGHT,
     RISK_THRESHOLDS,
 )
-from backend.agents.security_agent.models.domain import Finding
+from agents.security_agent.models.domain import Finding
 
 
-def calculate_attack_weight(attack_name: str, confidence: float, detector: str) -> float:
+def calculate_attack_weight(finding: Finding) -> float:
     """Calculate the weighted contribution of a single attack."""
-    base_weight = ATTACK_WEIGHTS.get(attack_name, 20)
+    base_weight = ATTACK_WEIGHTS.get(finding.threat.category, 20)
     
-    # LLM and Semantic detectors have deeper context, increase weight slightly
-    if detector == "LLMClassifier":
-        base_weight *= 1.2
-    elif detector == "Merged":
-        base_weight *= 1.1
+    # Base calculation
+    weight = base_weight * finding.confidence
+    
+    # Apply configured multipliers based on semantic/rule matches
+    if finding.detector == "RuleEngine":
+        weight *= RULE_MATCH_WEIGHT
+    elif finding.detector == "SemanticDetector":
+        # Semantic only
+        if finding.metadata:
+            similarity = finding.metadata.get("similarity_score", 1.0)
+            weight *= (similarity * SEMANTIC_SIMILARITY_WEIGHT)
+    elif finding.detector == "Merged":
+        # Both rule and semantic
+        weight *= RULE_MATCH_WEIGHT
+        if finding.metadata:
+            similarity = finding.metadata.get("similarity_score", 1.0)
+            weight *= (similarity * SEMANTIC_SIMILARITY_WEIGHT)
+            
+    # Apply OWASP mapping weight if available
+    if finding.metadata and finding.metadata.get("owasp_mapping") and finding.metadata.get("owasp_mapping") != "Unknown":
+        weight *= OWASP_MATCH_WEIGHT
         
-    return base_weight * confidence
+    # LLM Classifier context
+    if finding.detector == "LLMClassifier":
+        weight *= 1.2
+        
+    return weight
 
 def calculate_confidence(findings: list[Finding]) -> float:
     """Calculate an overall confidence score based on individual detection confidences."""
@@ -81,11 +104,11 @@ def calculate_risk_score(findings: list[Finding], was_encoded: bool = False, was
 
     # Calculate base score from individual attacks
     for finding in findings:
-        raw_score += calculate_attack_weight(finding.threat.category, finding.confidence, finding.detector)
+        raw_score += calculate_attack_weight(finding)
 
-    # Apply multipliers and penalties
+    # Apply multipliers and penalties for multiple attack families
     if detected_count > 1:
-        raw_score *= PENALTY_MULTI_ATTACK_MULTIPLIER
+        raw_score *= MULTI_ATTACK_FAMILY_WEIGHT
 
     if was_encoded:
         raw_score += PENALTY_ENCODED_PAYLOAD

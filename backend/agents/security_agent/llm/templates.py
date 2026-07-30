@@ -1,7 +1,7 @@
 """LLM Prompt Templates."""
 import json
 
-from backend.agents.security_agent.models.domain import Finding
+from agents.security_agent.models.domain import Finding
 
 SECURITY_CLASSIFIER_SYSTEM = """
 You are an expert AI Security Analyst. Your task is to analyze ambiguous or conflicting threat reports regarding an AI prompt and make a final determination.

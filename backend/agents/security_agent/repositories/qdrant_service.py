@@ -2,7 +2,7 @@
 import logging
 from typing import Any
 
-from backend.agents.security_agent.config import settings
+from agents.security_agent.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -93,11 +93,23 @@ class QdrantService:
         if self._is_mock:
             return []
         
-        return await self.client.search(
+        response = await self.client.query_points(
             collection_name=collection_name,
-            query_vector=vector,
+            query=vector,
             query_filter=query_filter,
             limit=limit
+        )
+        return response.points
+
+    async def retrieve_by_ids(self, collection_name: str, ids: list[str]) -> list[Any]:
+        """Retrieve points by ID."""
+        if self._is_mock:
+            return []
+        return await self.client.retrieve(
+            collection_name=collection_name,
+            ids=ids,
+            with_payload=False,
+            with_vectors=False
         )
 
     def health(self) -> dict[str, Any]:

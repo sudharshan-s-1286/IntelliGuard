@@ -2,9 +2,9 @@
 import logging
 from typing import Any
 
-from backend.agents.security_agent.config import settings
-from backend.agents.security_agent.models.domain import PatternMatch, VectorMetadata
-from backend.agents.security_agent.repositories.qdrant_service import QdrantService
+from agents.security_agent.config import settings
+from agents.security_agent.models.domain import PatternMatch, VectorMetadata
+from agents.security_agent.repositories.qdrant_service import QdrantService
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +27,23 @@ class KnowledgeRepository:
                 vector_size=settings.VECTOR_SIZE,
                 distance=settings.DISTANCE_METRIC
             )
+
+    async def check_existing_ids(self, ids: list[str]) -> set[str]:
+        """Check which of the given IDs already exist in the database."""
+        try:
+            # We can retrieve in batches if ids list is large, but qdrant supports reasonably large lists.
+            # However, safety first: chunk it to 1000 max.
+            existing = set()
+            batch_size = 1000
+            for i in range(0, len(ids), batch_size):
+                batch_ids = ids[i:i + batch_size]
+                results = await self.db.retrieve_by_ids(self.collection_name, batch_ids)
+                for res in results:
+                    existing.add(res.id)
+            return existing
+        except Exception as e:
+            logger.error(f"Error checking existing IDs: {e}")
+            return set()
 
     async def store_attack_patterns(self, vectors: list[list[float]], metadata_list: list[VectorMetadata]) -> None:
         """Store new attack patterns into the vector database."""

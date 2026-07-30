@@ -2,7 +2,7 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from backend.agents.security_agent.agent import SecurityAgent
+from agents.security_agent.agent import SecurityAgent
 
 
 class MockRequest:
@@ -14,9 +14,9 @@ def agent():
     return SecurityAgent()
 
 @pytest.mark.asyncio
-@patch('backend.agents.security_agent.agent.SemanticDetector')
-@patch('backend.agents.security_agent.agent.DecisionEngine')
-@patch('backend.agents.security_agent.agent.LLMClassifier')
+@patch('agents.security_agent.agent.SemanticDetector')
+@patch('agents.security_agent.agent.DecisionEngine')
+@patch('agents.security_agent.agent.LLMClassifier')
 async def test_agent_initialization(MockLLM, MockDecision, MockSemantic, agent):
     mock_semantic = MockSemantic.return_value
     mock_semantic.initialize = AsyncMock()
@@ -32,7 +32,7 @@ async def test_agent_initialization(MockLLM, MockDecision, MockSemantic, agent):
 @pytest.mark.asyncio
 async def test_agent_process_benign_prompt(agent):
     # Setup mock pipeline
-    from backend.agents.security_agent.models.domain import (
+    from agents.security_agent.models.domain import (
         DetectionResult,
         Metadata,
         RiskScore,
@@ -68,7 +68,7 @@ async def test_agent_process_benign_prompt(agent):
 
 @pytest.mark.asyncio
 async def test_agent_process_malicious_llm_fallback(agent):
-    from backend.agents.security_agent.models.domain import (
+    from agents.security_agent.models.domain import (
         DetectionResult,
         Finding,
         Metadata,

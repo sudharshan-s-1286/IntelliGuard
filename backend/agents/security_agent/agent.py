@@ -3,14 +3,14 @@ import logging
 import time
 from typing import Any
 
-from backend.agents.security_agent.detectors.decision_engine import DecisionEngine
-from backend.agents.security_agent.detectors.risk_scorer import calculate_risk_score
-from backend.agents.security_agent.detectors.semantic_detector import SemanticDetector
-from backend.agents.security_agent.llm.classifier import LLMClassifier
-from backend.agents.security_agent.models.domain import RiskScore
-from backend.agents.security_agent.reporting.generator import ReportGenerator
-from backend.agents.security_agent.utils.telemetry import AuditLogger, MetricsRegistry
-from backend.agents.security_agent.validators.request_validator import parse_prompt
+from agents.security_agent.detectors.decision_engine import DecisionEngine
+from agents.security_agent.detectors.risk_scorer import calculate_risk_score
+from agents.security_agent.detectors.semantic_detector import SemanticDetector
+from agents.security_agent.llm.classifier import LLMClassifier
+from agents.security_agent.models.domain import RiskScore
+from agents.security_agent.reporting.generator import ReportGenerator
+from agents.security_agent.utils.telemetry import AuditLogger, MetricsRegistry
+from agents.security_agent.validators.request_validator import parse_prompt
 
 logger = logging.getLogger(__name__)
 
@@ -65,15 +65,15 @@ class SecurityAgent:
         """Initialize external connections (Qdrant, LLM clients)."""
         logger.info("Initializing Enterprise Security Agent...")
         
-        from backend.agents.security_agent.ai.embeddings import EmbeddingService
-        from backend.agents.security_agent.repositories.knowledge_repository import (
+        from agents.security_agent.ai.embeddings import EmbeddingService
+        from agents.security_agent.repositories.knowledge_repository import (
             KnowledgeRepository,
         )
-        from backend.agents.security_agent.repositories.qdrant_service import (
+        from agents.security_agent.repositories.qdrant_service import (
             QdrantService,
         )
-        from backend.agents.security_agent.services.cache_service import CacheService
-        from backend.agents.security_agent.services.model_loader import ModelLoader
+        from agents.security_agent.services.cache_service import CacheService
+        from agents.security_agent.services.model_loader import ModelLoader
 
         model_loader = ModelLoader()
         cache_service = CacheService()
@@ -82,6 +82,7 @@ class SecurityAgent:
         
         qdrant_service = QdrantService()
         repository = KnowledgeRepository(qdrant_service=qdrant_service)
+        await repository.initialize()
         
         self.semantic_detector = SemanticDetector(
             embedding_service=embedding_service,
@@ -143,6 +144,7 @@ class SecurityAgent:
 
         # 1. Orchestrate Standard Detectors
         detection_result = await self.decision_engine.analyze(normalized_prompt)
+        logger.warning(f"DEBUG(4): detection result before risk scoring: {len(detection_result.findings)} findings.")
 
         # 2. LLM Fallback (if ambiguity or conflict exists)
         if detection_result.routing.needs_llm:
@@ -158,6 +160,7 @@ class SecurityAgent:
 
         # 3. Final Risk Scoring
         risk_assessment = calculate_risk_score(detection_result.findings, was_encoded=was_encoded)
+        logger.warning(f"DEBUG(5): final risk score calculation output: {risk_assessment}")
         
         # Inject the final risk score back into the DetectionResult so the ReportGenerator has it
         detection_result.risk_score = RiskScore(
@@ -179,9 +182,23 @@ class SecurityAgent:
 
         duration_ms = (time.time() - start_time) * 1000
 
+        # Extract semantic timing info if available
+        emb_time = 0.0
+        qdrant_time = 0.0
+        retrieved_results = 0
+        for finding in detection_result.findings:
+            if finding.metadata:
+                emb_time = max(emb_time, finding.metadata.get("embedding_time_ms", 0.0))
+                qdrant_time = max(qdrant_time, finding.metadata.get("qdrant_time_ms", 0.0))
+                if finding.detector in ("SemanticDetector", "Merged"):
+                    retrieved_results += 1
+
         # 5. Audit Logging
         self.audit_logger.log_event("PROMPT_ANALYSIS", {
             "processing_time_ms": duration_ms,
+            "embedding_time_ms": emb_time,
+            "qdrant_time_ms": qdrant_time,
+            "semantic_results_count": retrieved_results,
             "original_prompt": prompt,
             "detected_attacks": [f.threat.category for f in detection_result.findings],
             "risk_score": report.risk_score,

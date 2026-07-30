@@ -6,7 +6,7 @@ import time
 # Set sys.path manually for direct script execution
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
 
-from backend.agents.security_agent.agent import SecurityAgent
+from agents.security_agent.agent import SecurityAgent
 
 
 def run_request(prompt):
